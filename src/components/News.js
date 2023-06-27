@@ -266,10 +266,11 @@ export class News extends Component {
     }
   ]
 
+  
   constructor() {
     super();
     console.log("This is a constructor");
-
+    
     this.state = {
       articles: this.articles,
       loading: false
@@ -279,15 +280,20 @@ export class News extends Component {
   render() {  
     return (
       <div className='container my-3'>
-        <h2>
+        <h1 style={{display : "inline", marginRight : "10px"}}>
           Aaj Tak, Apke Ghar Tak
-        </h2>
+        </h1>
 
-        <div className="row">
+        <img src='https://upload.wikimedia.org/wikipedia/commons/7/73/Sweta_Singh.jpg' alt="" style={{height : "100px", width : "100px", display : "inline", borderRadius : "100px"}} />
+
+
+
+        <div className="row"> 
           {this.state.articles.map((element) => {
             return (
               <div className="col-md-4" key={element.url}>
-                <NewsItem title={element.title.slice(0, 40) + "..."} description={ (element.description==null ? element.description : element.description.slice(0, 100) + "...")} imageUrl={element.urlToImage} newsUrl = {element.url} />
+                {/* <NewsItem title={element.title.slice(0, 40) + "..."} description={ (element.description==null ? element.description : element.description.slice(0, 100) + "...")} imageUrl={element.urlToImage} newsUrl = {element.url} /> */}
+                <NewsItem title={(element.title.length > 40 ? element.title.slice(0, 40) + "..." : element.title)} description={ (element.description==null) ? (element.description) : (element.description.length>100 ? element.description.slice(0, 100) + "..." : element.description)} imageUrl={element.urlToImage} newsUrl = {element.url} />
               </div>
             )
           })}
