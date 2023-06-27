@@ -104,7 +104,7 @@ export class News extends Component {
       "title": "Pfizer Provides Update on GLP-1-RA Clinical Development Program for Adults with Obesity and Type 2 Diabetes Mellitus - Pfizer",
       "description": null,
       "url": "https://www.pfizer.com/news/press-release/press-release-detail/pfizer-provides-update-glp-1-ra-clinical-development",
-      "urlToImage": null,
+      "urlToImage": "https://cdn.pfizer.com/pfizercom/2022-10/banner_section/Image%20BG.png?4tyemIp2FXEdHBgjD7vUl9.UvQlMpFH3",
       "publishedAt": "2023-06-26T11:58:10Z",
       "content": null
     },
@@ -271,26 +271,27 @@ export class News extends Component {
     console.log("This is a constructor");
 
     this.state = {
-      articles : this.articles,
-      loading : false
+      articles: this.articles,
+      loading: false
     }
   }
 
-  render() {
+  render() {  
     return (
       <div className='container my-3'>
         <h2>
-          Aaj Tak, aapke Ghar Tak
+          Aaj Tak, Apke Ghar Tak
         </h2>
 
-        {this.state.articles.map((element) => {
-          console.log(element);
-        })}
-        
         <div className="row">
-          <div className="col-md-4">
-            <NewsItem title="Title" description=" This is a news" imageUrl="https://www.tampabay.com/resizer/-MeUZHsdaVZNXpKECCUPL456JMs=/1200x675/filters:focal(1725x1045:1735x1035)/cloudfront-us-east-1.images.arcpublishing.com/tbt/LJ56ATMHFXOLSJ6PW7EQN4LKCI.jpg" />
-          </div>
+          {this.state.articles.map((element) => {
+            return (
+              <div className="col-md-4" key={element.url}>
+                <NewsItem title={element.title.slice(0, 40) + "..."} description={ (element.description==null ? element.description : element.description.slice(0, 100) + "...")} imageUrl={element.urlToImage} newsUrl = {element.url} />
+              </div>
+            )
+          })}
+
         </div>
       </div>
     )
