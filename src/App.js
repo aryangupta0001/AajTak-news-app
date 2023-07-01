@@ -3,12 +3,11 @@ import Navbar from './components/Navbar';
 import News from './components/News';
 
 export default class App extends Component {
-  a = "Aryan";
   render() {
     return (
       <div>
         <Navbar/>
-        <News/>
+        <News pageSize = {6} country = "in" category = "general" />
       </div>
     )
   }
