@@ -34,12 +34,12 @@ export class Navbar extends Component {
                             </li> */}
 
                             <li className="nav-item"><Link className="nav-link active" aria-current="page" to="/">General</Link></li>
-                            <li className="nav-item"><Link className="nav-link active" aria-current="page" to="/">Technology</Link></li>
-                            <li className="nav-item"><Link className="nav-link active" aria-current="page" to="/">Business</Link></li>
-                            <li className="nav-item"><Link className="nav-link active" aria-current="page" to="/">Entertainment</Link></li>
-                            <li className="nav-item"><Link className="nav-link active" aria-current="page" to="/">Sports</Link></li>
-                            <li className="nav-item"><Link className="nav-link active" aria-current="page" to="/">Health</Link></li>
-                            <li className="nav-item"><Link className="nav-link active" aria-current="page" to="/">Science</Link></li>
+                            <li className="nav-item"><Link className="nav-link active" aria-current="page" to="/technology">Technology</Link></li>
+                            <li className="nav-item"><Link className="nav-link active" aria-current="page" to="/business">Business</Link></li>
+                            <li className="nav-item"><Link className="nav-link active" aria-current="page" to="/entertainment">Entertainment</Link></li>
+                            <li className="nav-item"><Link className="nav-link active" aria-current="page" to="/sports">Sports</Link></li>
+                            <li className="nav-item"><Link className="nav-link active" aria-current="page" to="/health">Health</Link></li>
+                            <li className="nav-item"><Link className="nav-link active" aria-current="page" to="/science">Science</Link></li>
 
                         </ul>
                         <form className="d-flex" role="search">
