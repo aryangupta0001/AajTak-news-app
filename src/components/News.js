@@ -51,6 +51,10 @@ export class News extends Component {
     }, () => {
       this.updateNews();
     });
+    
+    let a = "java"
+
+    console.log(a)
 
   }
 
@@ -115,15 +119,16 @@ export class News extends Component {
                       (element.title.split(" ").length > 10  ? element.title.split(" ").slice(0, 10).join(" ") + "..." : element.title)
                     }
 
-
                     description={
                       (element.description === null) ? (element.description) : (element.description.split(" ").length > 25 ? element.description.split(" ").slice(0, 20).join(" ") + "..." : element.description)
                     }
 
-
-
                     imageUrl={(element.urlToImage === null || element.urlToImage === "") ? require("./images/default-news-image.jpg") : element.urlToImage}
                     newsUrl={element.url}
+
+                    author = {(element.author === null) || (element.author === "") ? "Unknown" : element.author}
+
+                    time = {element.publishedAt}
                   />
                 </div>
               )
@@ -136,7 +141,7 @@ export class News extends Component {
 
           <button type="button"
             disabled={this.state.page === 1} className="btn btn-dark"
-            onClick={this.prevPage}>
+            onClick={this.prevPage(this)}>
             &larr; Previous
           </button>
 
