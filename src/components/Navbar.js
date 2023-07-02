@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 
 
 export class Navbar extends Component {
@@ -41,7 +41,21 @@ export class Navbar extends Component {
                             <li className="nav-item"><Link className="nav-link active" aria-current="page" to="/health">Health</Link></li>
                             <li className="nav-item"><Link className="nav-link active" aria-current="page" to="/science">Science</Link></li>
 
+                            {/* <li className="nav-item nav-link active" onClick={this.props.updateCategory(this)}style={{cursor: "pointer"}}>General</li>
+                            <li className="nav-item nav-link active" style={{cursor: "pointer"}}>{this.props.name}</li>
+                            <li className="nav-item nav-link active" style={{cursor: "pointer"}}>Business</li>
+                            <li className="nav-item nav-link active" style={{cursor: "pointer"}}>Entertainment</li>
+                            <li className="nav-item nav-link active" style={{cursor: "pointer"}}>Sports</li>
+                            <li className="nav-item nav-link active" style={{cursor: "pointer"}}>Health</li>
+                            <li className="nav-item nav-link active" style={{cursor: "pointer"}}>Science</li> */}
+
+
                         </ul>
+
+                        <li className="nav-item mx-5" style={{ width: "40px", display: "flex", alignItems: "center", justifyContent: "center" }}>
+                            <img src={require("./images/dark-mode.png")} alt="" style={{ maxWidth: "60%" }} />
+                        </li>
+
                         <form className="d-flex" role="search">
                             <input className="form-control me-2" type="search" placeholder="Search" aria-label="Search" />
                             <button className="btn btn-outline-success" type="submit">Search</button>

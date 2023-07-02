@@ -11,10 +11,10 @@ export class News extends Component {
     country: "in",
     pageSize: 6,
     category: "general"
-    
+
   }
-  
-  
+
+
   static propTypes = {
     country: PropTypes.string,
     pageSize: PropTypes.number,
@@ -29,31 +29,31 @@ export class News extends Component {
     this.state = {
       articles: [],
       loading: true,
-      page: 1,
+      page: 1
     };
   }
-  
+
   async componentDidMount() {
     let url = `https://newsapi.org/v2/top-headlines?country=${this.props.country}&category=${this.props.category}&apiKey=fdf7b06eac3847bbbb8733478f641676&page=${this.state.page}&pageSize=${this.props.pageSize}`;
     let data = await fetch(url);
     let parsedData = await data.json();
-    
+
     this.setState({
       articles: parsedData.articles,
       totalArticles: parsedData.totalResults,
       loading: false
     });
   }
- 
- prevPage = async () => {
-   this.setState({
-     page: this.state.page - 1
+
+  prevPage = async () => {
+    this.setState({
+      page: this.state.page - 1
     }, () => {
       this.updateNews();
     });
-    
+
   }
-  
+
   nextPage = async () => {
 
     this.setState({
@@ -62,25 +62,25 @@ export class News extends Component {
       this.updateNews();
     })
   }
-  
+
   updateNews = async () => {
     let url = `https://newsapi.org/v2/top-headlines?country=${this.props.country}&category=${this.props.category}&apiKey=fdf7b06eac3847bbbb8733478f641676&page=${this.state.page}&pageSize=${this.props.pageSize}`;
-    
+
     this.setState({
       loading: true,
     })
-    
+
     let data = await fetch(url);
     let parsedData = await data.json();
-    
+
     this.setState({
       articles: parsedData.articles,
       loading: false
     })
-    
+
   }
-  
-  
+
+
   render() {
     return (
       <div className='container my-3'>
@@ -107,13 +107,22 @@ export class News extends Component {
         <div className="row container" style={{ margin: "50px auto" }}>
           {
             !this.state.loading && this.state.articles.map((element) => {
-              
+
               return (
                 <div className="col-md-4" key={element.url}>
                   <NewsItem
-                    title={(element.title.length > 40 ? element.title.slice(0, 40) + "..." : element.title)}
-                    description={(element.description === null) ? (element.description) : (element.description.length > 100 ? element.description.slice(0, 100) + "..." : element.description)}
-                    imageUrl={element.urlToImage === null ? require("./images/default-news-image.jpg") : element.urlToImage}
+                    title={
+                      (element.title.split(" ").length > 10  ? element.title.split(" ").slice(0, 10).join(" ") + "..." : element.title)
+                    }
+
+
+                    description={
+                      (element.description === null) ? (element.description) : (element.description.split(" ").length > 25 ? element.description.split(" ").slice(0, 20).join(" ") + "..." : element.description)
+                    }
+
+
+
+                    imageUrl={(element.urlToImage === null || element.urlToImage === "") ? require("./images/default-news-image.jpg") : element.urlToImage}
                     newsUrl={element.url}
                   />
                 </div>
