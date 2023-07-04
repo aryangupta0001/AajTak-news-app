@@ -3,6 +3,26 @@ import NewsItem from './NewsItem'
 import Loading from "./Loading";
 import PropTypes from 'prop-types'
 
+import defaultNewsImage from './images/default-news-image.jpg';
+import shwetaSingh1 from './images/shweta_singh_1.jpg';
+import shwetaSingh2 from './images/shweta_singh_2.jpg';
+import shwetaSingh3 from './images/shweta_singh_3.jpg';
+import shwetaSingh4 from './images/shweta_singh_4.jpg';
+import rl1 from './images/rl_1.jfif';
+import rl2 from './images/rl_2.jfif';
+import rl3 from './images/rl_3.jfif';
+import rl4 from './images/rl_4.jfif';
+
+const imageMap = {
+  shwetaSingh1: shwetaSingh1,
+  shwetaSingh2: shwetaSingh2,
+  shwetaSingh3: shwetaSingh3,
+  shwetaSingh4: shwetaSingh4,
+  rl1: rl1,
+  rl2: rl2,
+  rl3: rl3,
+  rl4: rl4,
+};
 
 
 export class News extends Component {
@@ -53,21 +73,16 @@ export class News extends Component {
     });
   }
 
-  prevPage = async () => {
+  async prevPage() {
     this.setState({
       page: this.state.page - 1
     }, () => {
       this.updateNews();
     });
 
-    let a = "java"
-
-    console.log(a)
-
   }
 
-  nextPage = async () => {
-
+  async nextPage() {
     this.setState({
       page: this.state.page + 1
     }, () => {
@@ -92,7 +107,6 @@ export class News extends Component {
 
   }
 
-
   render() {
     return (
       <div className='container my-3'>
@@ -101,14 +115,31 @@ export class News extends Component {
             Aaj Tak, Apke Ghar Tak
           </h1>
 
-          <img src={require('./images/shweta_singh_1.jpg')} alt="" style={{ height: "75px", width: "75px", display: "inline", borderRadius: "75px", marginLeft: "25px" }} />
+          {/* <img src={require('./images/shweta_singh_1.jpg')} alt="" style={{ height: "75px", width: "75px", display: "inline", borderRadius: "75px", marginLeft: "25px" }} />
           <img src={require('./images/shweta_singh_2.jpg')} alt="" style={{ height: "75px", width: "75px", display: "inline", borderRadius: "75px", marginLeft: "25px" }} />
           <img src={require('./images/shweta_singh_3.jpg')} alt="" style={{ height: "75px", width: "75px", display: "inline", borderRadius: "75px", marginLeft: "25px" }} />
           <img src={require('./images/shweta_singh_4.jpg')} alt="" style={{ height: "75px", width: "75px", display: "inline", borderRadius: "75px", marginLeft: "25px" }} />
           <img src={require('./images/rl_1.jfif')} alt="" style={{ height: "75px", width: "75px", display: "inline", borderRadius: "75px", marginLeft: "25px" }} />
           <img src={require('./images/rl_2.jfif')} alt="" style={{ height: "75px", width: "75px", display: "inline", borderRadius: "75px", marginLeft: "25px" }} />
           <img src={require('./images/rl_3.jfif')} alt="" style={{ height: "75px", width: "75px", display: "inline", borderRadius: "75px", marginLeft: "25px" }} />
-          <img src={require('./images/rl_4.jfif')} alt="" style={{ height: "75px", width: "75px", display: "inline", borderRadius: "75px", marginLeft: "25px" }} />
+          <img src={require('./images/rl_4.jfif')} alt="" style={{ height: "75px", width: "75px", display: "inline", borderRadius: "75px", marginLeft: "25px" }} /> */}
+
+
+          {Object.values(imageMap).map((image, index) => (
+            <img
+              key={index}
+              src={image}
+              alt=''
+              style={{
+                height: '75px',
+                width: '75px',
+                display: 'inline',
+                borderRadius: '75px',
+                marginLeft: '25px',
+              }}
+            />
+          ))}
+
         </div>
 
 
@@ -118,32 +149,31 @@ export class News extends Component {
 
 
         <div className="row container" style={{ margin: "50px auto" }}>
-        {
-          // this.state.articles.map((element) => {
-          !this.state.loading && this.state.articles.map((element) => {
+          {
+            !this.state.loading && this.state.articles.map((element) => {
 
-            return (
-              <div className="col-md-4" key={element.url}>
-                <NewsItem
-                  title={
-                    (element.title.split(" ").length > 10 ? element.title.split(" ").slice(0, 10).join(" ") + "..." : element.title)
-                  }
+              return (
+                <div className="col-md-4" key={element.url}>
+                  <NewsItem
+                    title={
+                      (element.title.split(" ").length > 10 ? element.title.split(" ").slice(0, 10).join(" ") + "..." : element.title)
+                    }
 
-                  description={
-                    (element.description === null) ? (element.description) : (element.description.split(" ").length > 25 ? element.description.split(" ").slice(0, 20).join(" ") + "..." : element.description)
-                  }
+                    description={
+                      (element.description === null) ? (element.description) : (element.description.split(" ").length > 25 ? element.description.split(" ").slice(0, 20).join(" ") + "..." : element.description)
+                    }
 
-                  imageUrl={(element.urlToImage === null || element.urlToImage === "") ? require("./images/default-news-image.jpg") : element.urlToImage}
-                  newsUrl={element.url}
+                    imageUrl={(element.urlToImage === null || element.urlToImage === "") ? defaultNewsImage : element.urlToImage}
+                    newsUrl={element.url}
 
-                  author={(element.author === null) || (element.author === "") ? "Unknown" : element.author}
+                    author={(element.author === null) || (element.author === "") ? "Unknown" : element.author}
 
-                  time={element.publishedAt}
-                />
-              </div>
-            )
-          })
-        }
+                    time={element.publishedAt}
+                  />
+                </div>
+              )
+            })
+          }
 
         </div>
 

@@ -25,7 +25,7 @@ export class Navbar extends Component {
                                 <Link className="nav-link dropdown-toggle" to="/" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                                     Country
                                 </Link>
-                                <ul className="dropdown-menu">
+                                <ul className="dropdown-menu">  
                                     <li><Link className="dropdown-item" to="">Action</Link></li>
                                     <li><Link className="dropdown-item" to="/">Another action</Link></li>
                                     <li><hr className="dropdown-divider"/></li>
@@ -40,15 +40,6 @@ export class Navbar extends Component {
                             <li className="nav-item"><Link className="nav-link active" aria-current="page" to="/sports">Sports</Link></li>
                             <li className="nav-item"><Link className="nav-link active" aria-current="page" to="/health">Health</Link></li>
                             <li className="nav-item"><Link className="nav-link active" aria-current="page" to="/science">Science</Link></li>
-
-                            {/* <li className="nav-item nav-link active" onClick={this.props.updateCategory(this)}style={{cursor: "pointer"}}>General</li>
-                            <li className="nav-item nav-link active" style={{cursor: "pointer"}}>{this.props.name}</li>
-                            <li className="nav-item nav-link active" style={{cursor: "pointer"}}>Business</li>
-                            <li className="nav-item nav-link active" style={{cursor: "pointer"}}>Entertainment</li>
-                            <li className="nav-item nav-link active" style={{cursor: "pointer"}}>Sports</li>
-                            <li className="nav-item nav-link active" style={{cursor: "pointer"}}>Health</li>
-                            <li className="nav-item nav-link active" style={{cursor: "pointer"}}>Science</li> */}
-
 
                         </ul>
 
