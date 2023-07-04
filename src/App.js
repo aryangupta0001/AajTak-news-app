@@ -13,7 +13,6 @@ export default class App extends Component {
   render() {
     return (
       <Router>
-        <div>
           <Navbar />
           <Routes>
             <Route path= '/'              element={<News key="general"        pageSize={this.pageSize} country="in" category="general"        />} />
@@ -24,7 +23,6 @@ export default class App extends Component {
             <Route path= '/health'        element={<News key="health"         pageSize={this.pageSize} country="in" category="health"         />} />
             <Route path= '/science'       element={<News key="science"        pageSize={this.pageSize} country="in" category="science"        />} />
           </Routes>
-        </div>
       </Router>
     );
   }
