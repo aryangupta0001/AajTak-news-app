@@ -33,13 +33,13 @@ export class Navbar extends Component {
                                 </ul>
                             </li> */}
 
-                            <li className="nav-item"><Link className="nav-link active" aria-current="page" to="/">General</Link></li>
-                            <li className="nav-item"><Link className="nav-link active" aria-current="page" to="/technology">Technology</Link></li>
-                            <li className="nav-item"><Link className="nav-link active" aria-current="page" to="/business">Business</Link></li>
-                            <li className="nav-item"><Link className="nav-link active" aria-current="page" to="/entertainment">Entertainment</Link></li>
-                            <li className="nav-item"><Link className="nav-link active" aria-current="page" to="/sports">Sports</Link></li>
-                            <li className="nav-item"><Link className="nav-link active" aria-current="page" to="/health">Health</Link></li>
-                            <li className="nav-item"><Link className="nav-link active" aria-current="page" to="/science">Science</Link></li>
+                            <li className="nav-item"><Link className="nav-link active" aria-current="page"  onClick={() => this.props.changeCat("general")} to="/">General</Link></li>
+                            <li className="nav-item"><Link className="nav-link active" aria-current="page"  onClick={() => this.props.changeCat("technology")} to="/">Technology</Link></li>
+                            <li className="nav-item"><Link className="nav-link active" aria-current="page"  onClick={() => this.props.changeCat("business")} to="/">Business</Link></li>
+                            <li className="nav-item"><Link className="nav-link active" aria-current="page"  onClick={() => this.props.changeCat("entertainment")} to="/">Entertainment</Link></li>
+                            <li className="nav-item"><Link className="nav-link active" aria-current="page"  onClick={() => this.props.changeCat("sports")} to="/">Sports</Link></li>
+                            <li className="nav-item"><Link className="nav-link active" aria-current="page"  onClick={() => this.props.changeCat("health")} to="/">Health</Link></li>
+                            <li className="nav-item"><Link className="nav-link active" aria-current="page"  onClick={() => this.props.changeCat("science")} to="/">Science</Link></li>
 
                         </ul>
 
