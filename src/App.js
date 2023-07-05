@@ -13,19 +13,19 @@ export default class App extends Component {
   title = "Home";
 
   state = {
-    category: "general"
+    category: "general",
+    title: "Home"
   };
 
   setCategory = (newCategory) => {
     let category = newCategory === "home" ? "general" : newCategory;
     // let title = newCategory;
 
-    let title = newCategory.charAt(0).toUpperCase() + newCategory.slice(1);
-
-
+    
+    
     this.setState({
-      category: category
-
+      category: category,
+      title: newCategory.charAt(0).toUpperCase() + newCategory.slice(1)
     })
   }
 
@@ -40,7 +40,7 @@ export default class App extends Component {
       // </Router> */}
 
         <Navbar changeCat={this.setCategory} />
-        <News key={this.state.category} pageSize={this.pageSize} country="in" category={this.state.category} title = {this.title} />
+        <News key={this.state.title} pageSize={this.pageSize} country="in" category={this.state.category} title = {this.state.title} />
       </>
     );
   }

@@ -38,16 +38,19 @@ export class News extends Component {
   static propTypes = {
     country: PropTypes.string,
     pageSize: PropTypes.number,
-    category: PropTypes.string
+    category: PropTypes.string,
+    title: PropTypes.string
 
   }
 
 
-  constructor() {
-    super();
+  constructor(props) {
+    super(props);
 
     this.prevPage = this.prevPage.bind(this);
     this.nextPage = this.nextPage.bind(this);
+
+    document.title = `AajTak | ${this.props.title}`;
 
 
     this.state = {
