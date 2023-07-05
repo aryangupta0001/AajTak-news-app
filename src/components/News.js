@@ -118,16 +118,6 @@ export class News extends Component {
             Aaj Tak, Apke Ghar Tak
           </h1>
 
-          {/* <img src={require('./images/shweta_singh_1.jpg')} alt="" style={{ height: "75px", width: "75px", display: "inline", borderRadius: "75px", marginLeft: "25px" }} />
-          <img src={require('./images/shweta_singh_2.jpg')} alt="" style={{ height: "75px", width: "75px", display: "inline", borderRadius: "75px", marginLeft: "25px" }} />
-          <img src={require('./images/shweta_singh_3.jpg')} alt="" style={{ height: "75px", width: "75px", display: "inline", borderRadius: "75px", marginLeft: "25px" }} />
-          <img src={require('./images/shweta_singh_4.jpg')} alt="" style={{ height: "75px", width: "75px", display: "inline", borderRadius: "75px", marginLeft: "25px" }} />
-          <img src={require('./images/rl_1.jfif')} alt="" style={{ height: "75px", width: "75px", display: "inline", borderRadius: "75px", marginLeft: "25px" }} />
-          <img src={require('./images/rl_2.jfif')} alt="" style={{ height: "75px", width: "75px", display: "inline", borderRadius: "75px", marginLeft: "25px" }} />
-          <img src={require('./images/rl_3.jfif')} alt="" style={{ height: "75px", width: "75px", display: "inline", borderRadius: "75px", marginLeft: "25px" }} />
-          <img src={require('./images/rl_4.jfif')} alt="" style={{ height: "75px", width: "75px", display: "inline", borderRadius: "75px", marginLeft: "25px" }} /> */}
-
-
           {Object.values(imageMap).map((image, index) => (
             <img
               key={index}
@@ -145,37 +135,32 @@ export class News extends Component {
 
         </div>
 
-
-
         {this.state.loading && <Loading />}
 
-
-
         <div className="row container" style={{ margin: "50px auto" }}>
-          {
-            !this.state.loading && this.state.articles.map((element) => {
+          {!this.state.loading && this.state.articles.map((element) => {
 
-              return (
-                <div className="col-md-4" key={element.url}>
-                  <NewsItem
-                    title={
-                      (element.title.split(" ").length > 10 ? element.title.split(" ").slice(0, 10).join(" ") + "..." : element.title)
-                    }
+            return (
+              <div className="col-md-4" key={element.url}>
+                <NewsItem
+                  title={
+                    (element.title.split(" ").length > 10 ? element.title.split(" ").slice(0, 10).join(" ") + "..." : element.title)
+                  }
 
-                    description={
-                      (element.description === null) ? (element.description) : (element.description.split(" ").length > 25 ? element.description.split(" ").slice(0, 20).join(" ") + "..." : element.description)
-                    }
+                  description={
+                    (element.description === null) ? (element.description) : (element.description.split(" ").length > 25 ? element.description.split(" ").slice(0, 20).join(" ") + "..." : element.description)
+                  }
 
-                    imageUrl={(element.urlToImage === null || element.urlToImage === "") ? defaultNewsImage : element.urlToImage}
-                    newsUrl={element.url}
+                  imageUrl={(element.urlToImage === null || element.urlToImage === "") ? defaultNewsImage : element.urlToImage}
+                  newsUrl={element.url}
 
-                    author={(element.author === null) || (element.author === "") ? "Unknown" : element.author}
+                  author={(element.author === null) || (element.author === "") ? "Unknown" : element.author}
 
-                    time={element.publishedAt}
-                  />
-                </div>
-              )
-            })
+                  time={element.publishedAt}
+                />
+              </div>
+            )
+          })
           }
 
         </div>
