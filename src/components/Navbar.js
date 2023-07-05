@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Link } from 'react-router-dom';
+// import { Link } from 'react-router-dom';
 
 
 export class Navbar extends Component {
@@ -9,17 +9,30 @@ export class Navbar extends Component {
 
             <nav className="navbar navbar-expand-lg bg-body-tertiary">
                 <div className="container-fluid mx-5">
-                    <Link className="navbar-brand" to="/">AajTak</Link>
+                    {/* <Link className="navbar-brand" aria-current="page" onClick={() => this.props.changeCat("general")} to="/">AajTak</Link> */}
 
-                    <button className="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+
+                    <button className="navbar-brand nav-link active" aria-current="page" onClick={() => this.props.changeCat("home")} to="/">AajTak</button>
+
+
+                    {/* <button className="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation"    onClick={() => this.props.changeCat("general")} >
                         <span className="navbar-toggler-icon"></span>
-                    </button>
+                    </button> */}
 
                     <div className="collapse navbar-collapse" id="navbarSupportedContent">
                         <ul className="navbar-nav me-auto mb-2 mb-lg-0">
-                            <li className="nav-item">
-                                <Link className="nav-link active" aria-current="page" to="/">Home</Link>
-                            </li>
+
+                            {/* If below links, do not work or give error, try the following li item :- */}
+                            {/* <li className="nav-item"><Link className="nav-link active" aria-current="page"  onClick={() => this.props.changeCat("general")} to="/">General</Link></li> */}
+
+                            <li className="nav-item"><button className="nav-link active" aria-current="page" onClick={() => this.props.changeCat("general")} >         General</button></li>
+                            <li className="nav-item"><button className="nav-link active" aria-current="page" onClick={() => this.props.changeCat("technology")} >      Technology</button></li>
+                            <li className="nav-item"><button className="nav-link active" aria-current="page" onClick={() => this.props.changeCat("business")} >        Business</button></li>
+                            <li className="nav-item"><button className="nav-link active" aria-current="page" onClick={() => this.props.changeCat("entertainment")} >   Entertainment</button></li>
+                            <li className="nav-item"><button className="nav-link active" aria-current="page" onClick={() => this.props.changeCat("sports")} >          Sports</button></li>
+                            <li className="nav-item"><button className="nav-link active" aria-current="page" onClick={() => this.props.changeCat("health")} >          Health</button></li>
+                            <li className="nav-item"><button className="nav-link active" aria-current="page" onClick={() => this.props.changeCat("science")} >         Science</button></li>
+
 
                             {/* <li className="nav-item dropdown">
                                 <Link className="nav-link dropdown-toggle" to="/" role="button" data-bs-toggle="dropdown" aria-expanded="false">
@@ -32,14 +45,6 @@ export class Navbar extends Component {
                                     <li><Link className="dropdown-item" to="/">Something else here</Link></li>
                                 </ul>
                             </li> */}
-
-                            <li className="nav-item"><Link className="nav-link active" aria-current="page"  onClick={() => this.props.changeCat("general")} to="/">General</Link></li>
-                            <li className="nav-item"><Link className="nav-link active" aria-current="page"  onClick={() => this.props.changeCat("technology")} to="/">Technology</Link></li>
-                            <li className="nav-item"><Link className="nav-link active" aria-current="page"  onClick={() => this.props.changeCat("business")} to="/">Business</Link></li>
-                            <li className="nav-item"><Link className="nav-link active" aria-current="page"  onClick={() => this.props.changeCat("entertainment")} to="/">Entertainment</Link></li>
-                            <li className="nav-item"><Link className="nav-link active" aria-current="page"  onClick={() => this.props.changeCat("sports")} to="/">Sports</Link></li>
-                            <li className="nav-item"><Link className="nav-link active" aria-current="page"  onClick={() => this.props.changeCat("health")} to="/">Health</Link></li>
-                            <li className="nav-item"><Link className="nav-link active" aria-current="page"  onClick={() => this.props.changeCat("science")} to="/">Science</Link></li>
 
                         </ul>
 
