@@ -2,6 +2,7 @@ import React, { Component } from 'react'
 import NewsItem from './NewsItem'
 import Loading from "./Loading";
 import PropTypes from 'prop-types'
+import InfiniteScroll from 'react-infinite-scroller';
 
 import defaultNewsImage from './images/default-news-image.jpg';
 import shwetaSingh1 from './images/shweta_singh_1.jpg';
@@ -47,8 +48,8 @@ export class News extends Component {
   constructor(props) {
     super(props);
 
-    this.prevPage = this.prevPage.bind(this);
-    this.nextPage = this.nextPage.bind(this);
+    // this.prevPage = this.prevPage.bind(this);
+    // this.nextPage = this.nextPage.bind(this);
 
     document.title = `AajTak | ${this.props.title}`;
 
@@ -57,21 +58,24 @@ export class News extends Component {
       articles: [],
       loading: true,
       page: 1,
-      // api : "e7f3c5c6bfbd4eb09d89234855d036ba",      //1
+      totalArticles: 0,
+      // api: "e7f3c5c6bfbd4eb09d89234855d036ba",           //1
       // api: "fdf7b06eac3847bbbb8733478f641676",           //2
-      api: "72fb1894d0b7482297edd8dd614d55da"           //3
+      // api: "72fb1894d0b7482297edd8dd614d55da",           //3
+      // api: "b5ec941c97a5433a9b5ebe68302ce143",           //4
+      // api: "f9d598beb4bf4cb78701c48fa37175ec",           //5  
+      // api: "b047f87941d64bca838116aa9f5439bf"            //6
     };
   }
 
   async componentDidMount() {
-    let url = `https://newsapi.org/v2/top-headlines?country=${this.props.country}&category=${this.props.category}&apiKey=${this.state.api}&page=${this.state.page}&pageSize=${this.props.pageSize}`;
-    let data = await fetch(url);
-    let parsedData = await data.json();
+    // let url = `https://newsapi.org/v2/top-headlines?country=${this.props.country}&category=${this.props.category}&apiKey=${this.state.api}&page=${this.state.page}&pageSize=${this.props.pageSize}`;
+    // let data = await fetch(url);
+    // let parsedData = await data.json();
 
     this.setState({
       articles: parsedData.articles,
       totalArticles: parsedData.totalResults,
-      // totalArticles: 33,
       loading: false
     });
   }
@@ -89,7 +93,7 @@ export class News extends Component {
     this.setState({
       page: this.state.page + 1
     }, () => {
-      this.updateNews();
+      this.fetchMoreData();
     })
   }
 
@@ -107,8 +111,28 @@ export class News extends Component {
       articles: parsedData.articles,
       loading: false
     })
-
   }
+
+  loadFunc = async () => {
+    this.setState({
+      page: this.state.page + 1
+    })
+
+    let url = `https://newsapi.org/v2/top-headlines?country=${this.props.country}&category=${this.props.category}&apiKey=${this.state.api}&page=${this.state.page}&pageSize=${this.props.pageSize}`;
+
+    this.setState({
+      loading: true,
+    })
+
+    let data = await fetch(url);
+    let parsedData = await data.json();
+
+    this.setState({
+      articles: this.state.articles.concat(parsedData.articles),
+      loading: false
+    })
+  }
+
 
   render() {
     return (
@@ -135,52 +159,69 @@ export class News extends Component {
 
         </div>
 
-        {this.state.loading && <Loading />}
+        {/* {this.state.loading && <Loading />} */}
 
-        <div className="row container" style={{ margin: "50px auto" }}>
-          {!this.state.loading && this.state.articles.map((element) => {
+        {/* <InfiniteScroll
+          dataLength={this.state.articles.length}
+          next={this.nextPage}
+          hasMore={this.state.articles.length !== this.state.totalArticles}
+          loader={<Loading />}
+        > */}
 
-            return (
-              <div className="col-md-4" key={element.url}>
-                <NewsItem
-                  title={
-                    (element.title.split(" ").length > 10 ? element.title.split(" ").slice(0, 10).join(" ") + "..." : element.title)
-                  }
+        <InfiniteScroll
+          pageStart={0}
+          loadMore={this.loadFunc}
+          hasMore={this.state.articles.length !== this.state.totalArticles}
+          loader={<Loading />}
+          useWindow={false}
+        >
 
-                  description={
-                    (element.description === null) ? (element.description) : (element.description.split(" ").length > 25 ? element.description.split(" ").slice(0, 20).join(" ") + "..." : element.description)
-                  }
 
-                  imageUrl={(element.urlToImage === null || element.urlToImage === "") ? defaultNewsImage : element.urlToImage}
-                  newsUrl={element.url}
+          <div className="row container" style={{ margin: "50px auto" }}>
+            {this.state.articles.map((element, index) => {
 
-                  author={(element.author === null) || (element.author === "") ? "Unknown" : element.author}
+              return (
+                <div className="col-md-4" key={index}>
+                  <NewsItem
+                    title={
+                      (element.title.split(" ").length > 10 ? element.title.split(" ").slice(0, 10).join(" ") + "..." : element.title)
+                    }
 
-                  time={element.publishedAt}
-                />
-              </div>
-            )
-          })
-          }
+                    description={
+                      (element.description === null) ? (element.description) : (element.description.split(" ").length > 25 ? element.description.split(" ").slice(0, 20).join(" ") + "..." : element.description)
+                    }
 
-        </div>
+                    imageUrl={(element.urlToImage === null || element.urlToImage === "") ? defaultNewsImage : element.urlToImage}
+                    newsUrl={element.url}
 
-        <div className="d-flex justify-content-between align-items-center" style={{ margin: "50px 0px" }}>
+                    author={(element.author === null) || (element.author === "") ? "Unknown" : element.author}
 
-          <button type="button"
-            disabled={this.state.page === 1} className="btn btn-dark"
-            onClick={this.prevPage}>
-            &larr; Previous
-          </button>
+                    time={element.publishedAt}
+                  />
+                </div>
+              )
+            })
+            }
+          </div>
 
-          <div style={{ fontSize: "18px", fontFamily: "'Open Sans', sans-serif" }}>{this.state.page} / {Math.ceil(this.state.totalArticles / this.props.pageSize)}</div>
-          <button type="button"
-            disabled={this.state.page === Math.ceil(this.state.totalArticles / this.props.pageSize)}
-            className="btn btn-dark"
-            onClick={this.nextPage}>
-            Next &rarr;
-          </button>
-        </div>
+        </InfiniteScroll>
+
+        {/* <div className="d-flex justify-content-between align-items-center" style={{ margin: "50px 0px" }}>
+
+        <button type="button"
+          disabled={this.state.page === 1} className="btn btn-dark"
+          onClick={this.prevPage}>
+          &larr; Previous
+        </button>
+
+        <div style={{ fontSize: "18px", fontFamily: "'Open Sans', sans-serif" }}>{this.state.page} / {Math.ceil(this.state.totalArticles / this.props.pageSize)}</div>
+        <button type="button"
+          disabled={this.state.page === Math.ceil(this.state.totalArticles / this.props.pageSize)}
+          className="btn btn-dark"
+          onClick={this.nextPage}>
+          Next &rarr;
+        </button>
+      </div> */}
 
       </div>
     )

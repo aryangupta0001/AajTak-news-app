@@ -20,8 +20,8 @@ export default class App extends Component {
   setCategory = (newCategory) => {
     let category = newCategory === "home" ? "general" : newCategory;
     // let title = newCategory;
-
     
+
     
     this.setState({
       category: category,
