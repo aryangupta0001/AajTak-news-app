@@ -1,0 +1,1561 @@
+import React, { Component } from 'react'
+import NewsItem from './NewsItem'
+import Loading from "./Loading";
+import PropTypes from 'prop-types'
+import InfiniteScroll from 'react-infinite-scroller';
+import jsonData from './Sample.json'
+
+import defaultNewsImage from './images/default-news-image.jpg';
+import shwetaSingh1 from './images/shweta_singh_1.jpg';
+import shwetaSingh2 from './images/shweta_singh_2.jpg';
+import shwetaSingh3 from './images/shweta_singh_3.jpg';
+import shwetaSingh4 from './images/shweta_singh_4.jpg';
+import rl1 from './images/rl_1.jfif';
+import rl2 from './images/rl_2.jfif';
+import rl3 from './images/rl_3.jfif';
+import rl4 from './images/rl_4.jfif';
+import { wait } from '@testing-library/user-event/dist/utils';
+
+const imageMap = {
+  shwetaSingh1: shwetaSingh1,
+  shwetaSingh2: shwetaSingh2,
+  shwetaSingh3: shwetaSingh3,
+  shwetaSingh4: shwetaSingh4,
+  rl1: rl1,
+  rl2: rl2,
+  rl3: rl3,
+  rl4: rl4,
+};
+
+
+export class News extends Component {
+
+  static defaultProps = {
+    country: "in",
+    pageSize: 6,
+    category: "general"
+
+  }
+
+
+  static propTypes = {
+    country: PropTypes.string,
+    pageSize: PropTypes.number,
+    category: PropTypes.string,
+    title: PropTypes.string
+
+  }
+
+  articles = [
+    {
+      "source": {
+        "id": null,
+        "name": "Marketscreener.com"
+      },
+      "author": "Reuters",
+      "title": "Tesla offers new China rebate as price cuts rock EV market",
+      "description": "(marketscreener.com) Tesla on Friday offered a\nnew incentive to boost electric vehicle sales in China as it\nnotified some workers making battery packs at its Shanghai\ncomplex of layoffs, according to a company announcement and a\nworker who had received the no…",
+      "url": "https://www.marketscreener.com/quote/stock/TESLA-INC-6344549/news/Tesla-offers-new-China-rebate-as-price-cuts-rock-EV-market-44286954/",
+      "urlToImage": "https://www.marketscreener.com/images/twitter_MS_fdnoir.png",
+      "publishedAt": "2023-07-07T06:48:42Z",
+      "content": "BEIJING, July 7 (Reuters) - Tesla on Friday offered a\r\nnew incentive to boost electric vehicle sales in China as it\r\nnotified some workers making battery packs at its Shanghai\r\ncomplex of layoffs, ac… [+4398 chars]"
+    },
+    {
+      "source": {
+        "id": null,
+        "name": "The Japan Times"
+      },
+      "author": "Caleb Mutua",
+      "title": "Toyota taps U.S. ESG bond market to fund electric-car push",
+      "description": "Operating margins may rise just as peers face pressure from the launch of new EVs, additional competition from Chinese manufacturers and pricing tactics from Tesla.",
+      "url": "https://www.japantimes.co.jp/news/2023/07/07/business/toyota-us-esg-bond-market/",
+      "urlToImage": "https://cdn-japantimes.com/wp-content/uploads/2023/07/np_file_237513-870x489.jpeg",
+      "publishedAt": "2023-07-07T06:38:52Z",
+      "content": "Toyota sold socially conscious debt denominated in dollars for the first time in two years as the Japanese carmaker looks to boost its production of electric vehicles and compete with Tesla.\r\nThe aut… [+1009 chars]"
+    },
+    {
+      "source": {
+        "id": "the-irish-times",
+        "name": "The Irish Times"
+      },
+      "author": "Hannah Murphy",
+      "title": "Twitter threatens trade secrets lawsuit over Meta’s Threads app",
+      "description": "Warning to Mark Zuckerberg comes as new users top 30m on first day of message service",
+      "url": "https://www.irishtimes.com/business/2023/07/07/twitter-threatens-trade-secrets-lawsuit-over-metas-threads-app/",
+      "urlToImage": "https://www.irishtimes.com/resizer/8Owkt9U2YudFoi3yLDuIfBl260U=/1200x630/filters:format(jpg):quality(70)/cloudfront-eu-central-1.images.arcpublishing.com/irishtimes/KOD6RIOPD2FOHXEFJGXGMQS5JE.jpg",
+      "publishedAt": "2023-07-07T06:18:52Z",
+      "content": "Twitter has threatened to sue Meta alleging it stole the companys trade secrets when creating its rival messaging app Threads, as the new platform attracted tens of millions of users within hours of … [+3402 chars]"
+    },
+    {
+      "source": {
+        "id": null,
+        "name": "The Star Online"
+      },
+      "author": "Julia Marnin",
+      "title": "Amazon manager stole nearly RM46.70mil and bought home, cars, US feds say. She’s prison-bound",
+      "description": "A former Amazon operations manager – dubbed the “mastermind” behind a scheme in which nearly US$10mil (RM46.70mil) was stolen from the company – is going to federal prison, US prosecutors announced. Read full story",
+      "url": "https://www.thestar.com.my/tech/tech-news/2023/07/07/amazon-manager-stole-nearly-rm4670mil-and-bought-home-cars-us-feds-say-shes-prison-bound",
+      "urlToImage": "https://apicms.thestar.com.my/uploads/images/2023/07/07/2164865.JPG",
+      "publishedAt": "2023-07-07T06:05:00Z",
+      "content": "A former Amazon operations manager dubbed the mastermind behind a scheme in which nearly US$10mil (RM46.70mil) was stolen from the company is going to federal prison, US prosecutors announced.\r\nNow s… [+4980 chars]"
+    },
+    {
+      "source": {
+        "id": null,
+        "name": "Marketscreener.com"
+      },
+      "author": "MarketScreener with dpa-AFX Analyser",
+      "title": "CRH : JP Morgan reiterates its Buy rating",
+      "description": "(marketscreener.com) JP Morgan analyst Elodie Rall maintains his Buy rating on the stock.https://www.marketscreener.com/quote/stock/CRH-PLC-4000708/news/CRH-JP-Morgan-reiterates-its-Buy-rating-44285738/?utm_medium=RSS&utm_content=20230707",
+      "url": "https://www.marketscreener.com/quote/stock/CRH-PLC-4000708/news/CRH-JP-Morgan-reiterates-its-Buy-rating-44285738/",
+      "urlToImage": "https://www.marketscreener.com/images/twitter_MS_fdblanc.png",
+      "publishedAt": "2023-07-07T06:04:02Z",
+      "content": "JP Morgan analyst Elodie Rall maintains his Buy rating on the stock.\r\n© MarketScreener with dpa-AFX Analyser - 2023\r\n<table><tr><td>\r\n CRH : JP Morgan reiterates its Buy rating\r\n</td><td></td><td>\r\n … [+2795 chars]"
+    },
+    {
+      "source": {
+        "id": null,
+        "name": "Marketscreener.com"
+      },
+      "author": "MarketScreener with dpa-AFX Analyser",
+      "title": "JUST EAT TAKEAWAY.COM : JP Morgan reiterates its Neutral rating",
+      "description": "(marketscreener.com) Analyst Marcus Diebel from JP Morgan research gives the stock a Neutral rating. The target price is lowered from EUR 1524 to EUR 1416.https://www.marketscreener.com/quote/stock/JUST-EAT-TAKEAWAY-COM-N-V-31472057/news/JUST-EAT-TAKEAWAY-COM…",
+      "url": "https://www.marketscreener.com/quote/stock/JUST-EAT-TAKEAWAY-COM-N-V-31472057/news/JUST-EAT-TAKEAWAY-COM-JP-Morgan-reiterates-its-Neutral-rating-44285576/",
+      "urlToImage": "https://www.marketscreener.com/images/twitter_MS_fdblanc.png",
+      "publishedAt": "2023-07-07T05:48:04Z",
+      "content": "Analyst Marcus Diebel from JP Morgan research gives the stock a Neutral rating. The target price is lowered from EUR 1524 to EUR 1416.\r\n© MarketScreener with dpa-AFX Analyser - 2023\r\n<table><tr><td>\r… [+3626 chars]"
+    },
+    {
+      "source": {
+        "id": null,
+        "name": "The Star Online"
+      },
+      "author": "SARBAN SINGH",
+      "title": "Anwar to meet Elon Musk to discuss further investments in Malaysia",
+      "description": "SEREMBAN: Datuk Seri Anwar Ibrahim will meet electric car giant Tesla's chief executive officer Elon Musk next week to explore ways the billionaire can increase his investments in Malaysia. Read full story",
+      "url": "https://www.thestar.com.my/news/nation/2023/07/07/anwar-to-meet-elon-musk-to-discuss-further-investments-in-malaysia",
+      "urlToImage": "https://apicms.thestar.com.my/uploads/images/2023/07/07/2164820.jpg",
+      "publishedAt": "2023-07-07T05:46:00Z",
+      "content": "SEREMBAN: Datuk Seri Anwar Ibrahim will meet electric car giant Tesla's chief executive officer Elon Musk next week to explore ways the billionaire can increase his investments in Malaysia.\r\nThe Prim… [+2432 chars]"
+    },
+    {
+      "source": {
+        "id": null,
+        "name": "Biztoc.com"
+      },
+      "author": "finance.yahoo.com",
+      "title": "Retail investors are chasing the rally in the stock market. Here's exactly what they're buying",
+      "description": "None Retail investors are \"aggressively\" chasing the stock market rally, according to Vanda Research. • None The buying has included both individual stocks and ETFs, suggesting that they are bullish on the broad equity market. • None \"The monthly net inflows …",
+      "url": "https://biztoc.com/x/4437034368f3b5e9",
+      "urlToImage": "https://c.biztoc.com/p/4437034368f3b5e9/s.webp",
+      "publishedAt": "2023-07-07T05:38:03Z",
+      "content": "None Retail investors are \"aggressively\" chasing the stock market rally, according to Vanda Research.None The buying has included both individual stocks and ETFs, suggesting that they are bullish on … [+278 chars]"
+    },
+    {
+      "source": {
+        "id": null,
+        "name": "Barron's"
+      },
+      "author": "Lewis Braham",
+      "title": "Growth Is Back. Where to Invest Now.",
+      "description": "Can the AI-driven rally in growth stock funds continue? Large-cap growth funds are already up 24% this year, but so are valuations.",
+      "url": "https://www.barrons.com/articles/growth-funds-ai-technology-799e9ed3",
+      "urlToImage": "https://images.barrons.com/im-812215/social",
+      "publishedAt": "2023-07-07T05:36:31Z",
+      "content": "Growth funds are hot again. Now some investors are wondering if its too late to jump on the bandwagon. Here are some ways to play the trend without getting burned.The \r\n Nasdaq 100\r\n index, which inc… [+17075 chars]"
+    },
+    {
+      "source": {
+        "id": null,
+        "name": "Barron's"
+      },
+      "author": "Lauren Foster",
+      "title": "The S&P 500 Is a Megacap Tech Fund. Where to Invest Instead.",
+      "description": "To capture the market’s full potential return, investment strategists recommend adding exposure to international markets, value stocks, and small- and mid-cap companies.",
+      "url": "https://www.barrons.com/articles/diversify-investments-big-tech-funds-3e8fe9e9",
+      "urlToImage": "https://images.barrons.com/im-812225/social",
+      "publishedAt": "2023-07-07T05:36:31Z",
+      "content": "Its the basis of the classic index fund. Its the core holding in legions of portfolios and the proxy for the U.S. market. But the \r\n S&amp;P 500\r\n isnt really a diversified index anymore: The Big Sev… [+6177 chars]"
+    },
+    {
+      "source": {
+        "id": "the-times-of-india",
+        "name": "The Times of India"
+      },
+      "author": "Bloomberg",
+      "title": "Tesla starts to lay off some battery workers at China plant",
+      "description": "Tesla is reportedly laying off some employees from its electric-vehicle battery production lines at its Shanghai factory due to reasons yet unclear. The workers on battery assembly lines are being notified of the decision this week and have been given the opt…",
+      "url": "https://timesofindia.indiatimes.com/world/china/tesla-starts-to-lay-off-some-battery-workers-at-china-plant/articleshow/101563013.cms",
+      "urlToImage": "https://static.toiimg.com/thumb/msid-101562984,width-1070,height-580,imgsize-84172,resizemode-75,overlay-toi_sw,pt-32,y_pad-40/photo.jpg",
+      "publishedAt": "2023-07-07T05:18:47Z",
+      "content": "Top 6 zodiac signs who make good parents"
+    },
+    {
+      "source": {
+        "id": "business-insider",
+        "name": "Business Insider"
+      },
+      "author": "Kwan Wei Kevin Tan",
+      "title": "MrBeast is giving away a Tesla to a random follower to celebrate the launch of Zuckerberg's Threads",
+      "description": "MrBeast currently has 2.4 million followers on Threads, relatively lower than his Twitter account, which has 21.6 million followers.",
+      "url": "https://www.businessinsider.com/mrbeast-giving-away-tesla-celebrate-launch-meta-mark-zuckerberg-threads-2023-7",
+      "urlToImage": "https://i.insider.com/64a7907b6075be0019c2eddd?width=1200&format=jpeg",
+      "publishedAt": "2023-07-07T05:11:06Z",
+      "content": "MrBeast said he's giving away a Tesla to a random follower on Meta's Threads.Patrick Pleul / POOL / AFP via Getty Images; Steve Granitz/FilmMagic via Getty Images\r\n<ul>\n<li>MrBeast is giving away a T… [+2019 chars]"
+    },
+    {
+      "source": {
+        "id": "independent",
+        "name": "Independent"
+      },
+      "author": "Anthony Cuthbertson",
+      "title": "Massive mineral deposit discovery could meet global battery and solar panel demand ‘for next 100 years’",
+      "description": "Norge Mining hopes to open first mine in Norway within next five years",
+      "url": "https://www.independent.co.uk/tech/norway-phosphate-solar-panels-battery-b2371044.html",
+      "urlToImage": "https://static.independent.co.uk/2023/07/03/12/phosphate%20rock%20discovery%20battery.jpg?quality=75&width=1200&auto=webp",
+      "publishedAt": "2023-07-07T05:10:39Z",
+      "content": "For free real time breaking news alerts sent straight to your inbox sign up to our breaking news emails\r\nSign up to our free breaking news emails\r\nA huge phosphate rock deposit discovered in Norway c… [+3125 chars]"
+    },
+    {
+      "source": {
+        "id": null,
+        "name": "Biztoc.com"
+      },
+      "author": "cryptoslate.com",
+      "title": "Elon Musk says that China is ‘going to be great’ at AI development",
+      "description": "Tesla CEO Elon Musk expressed confidence in China’s ability to succeed in the field of artificial intelligence, the South China Morning Post (SCMP) said on July 6. Musk made his comments at the World AI Conference (WAIC), an event hosted by Chinese authoritie…",
+      "url": "https://biztoc.com/x/556c15819219e344",
+      "urlToImage": "https://c.biztoc.com/p/556c15819219e344/s.webp",
+      "publishedAt": "2023-07-07T05:02:05Z",
+      "content": "Tesla CEO Elon Musk expressed confidence in Chinas ability to succeed in the field of artificial intelligence, the South China Morning Post (SCMP) said on July 6.Musk made his comments at the World A… [+285 chars]"
+    },
+    {
+      "source": {
+        "id": null,
+        "name": "CryptoSlate"
+      },
+      "author": "Mike Dalton",
+      "title": "Elon Musk says that China is ‘going to be great’ at AI development",
+      "description": "Tesla CEO Elon Musk expressed confidence in China’s ability to succeed in the field of artificial intelligence, the South China Morning Post (SCMP) said on July 6. Musk made his comments at the World AI Conference (WAIC), an event hosted by Chinese authoritie…",
+      "url": "https://cryptoslate.com/elon-musk-says-that-china-is-going-to-be-great-at-ai-development/",
+      "urlToImage": "https://cryptoslate.com/wp-content/uploads/2022/03/metaverse-china.jpg",
+      "publishedAt": "2023-07-07T05:00:24Z",
+      "content": "Tesla CEO Elon Musk expressed confidence in China’s ability to succeed in the field of artificial intelligence, the South China Morning Post (SCMP) said on July 6.\r\nMusk made his comments at the Worl… [+2508 chars]"
+    },
+    {
+      "source": {
+        "id": null,
+        "name": "Biztoc.com"
+      },
+      "author": "reuters.com",
+      "title": "Tesla offers cash rebate on top models in China",
+      "description": "Tesla on Friday said it would offer new buyers of its top-selling electric vehicles in China a cash bonus equivalent to almost $500 if they have a referral from an existing owner, deepening a price war in the world's largest market for EVs. Tesla said it woul…",
+      "url": "https://biztoc.com/x/e835f58c1a6f4744",
+      "urlToImage": "https://c.biztoc.com/p/e835f58c1a6f4744/s.webp",
+      "publishedAt": "2023-07-07T04:56:03Z",
+      "content": "Tesla on Friday said it would offer new buyers of its top-selling electric vehicles in China a cash bonus equivalent to almost $500 if they have a referral from an existing owner, deepening a price w… [+303 chars]"
+    },
+    {
+      "source": {
+        "id": null,
+        "name": "Investing.com"
+      },
+      "author": "Reuters",
+      "title": "Tesla offers cash rebate on top models in China",
+      "description": "Tesla offers cash rebate on top models in China",
+      "url": "https://www.investing.com/news/stock-market-news/tesla-offers-cash-rebate-on-top-models-in-china-3121210",
+      "urlToImage": "https://i-invdn-com.investing.com/news/LYNXMPEE6H1AX_L.jpg",
+      "publishedAt": "2023-07-07T04:55:56Z",
+      "content": "BEIJING (Reuters) - Tesla (NASDAQ:TSLA) on Friday said it would offer new buyers of its top-selling electric vehicles in China a cash bonus equivalent to almost $500 if they have a referral from an e… [+2488 chars]"
+    },
+    {
+      "source": {
+        "id": null,
+        "name": "CNA"
+      },
+      "author": null,
+      "title": "Tesla offers cash rebate on top models in China",
+      "description": "BEIJING : Tesla on Friday said it would offer new buyers of its top-selling electric vehicles in China a cash bonus equivalent to almost $500 if they have a referral from an existing owner, deepening a price war in the world's largest market for EVs.Tesla sai…",
+      "url": "https://www.channelnewsasia.com/business/tesla-offers-cash-rebate-top-models-china-3612716",
+      "urlToImage": "https://onecms-res.cloudinary.com/image/upload/s--8DMThO5F--/fl_relative,g_south_east,l_one-cms:core:watermark:reuters,w_0.1/f_auto,q_auto/c_fill,g_auto,h_676,w_1200/v1/one-cms/core/2023-07-07t045409z_2_lynxmpej6604v_rtroptp_3_china-trade-expo.jpg?itok=Hy1TWwV1",
+      "publishedAt": "2023-07-07T04:54:09Z",
+      "content": "BEIJING : Tesla on Friday said it would offer new buyers of its top-selling electric vehicles in China a cash bonus equivalent to almost $500 if they have a referral from an existing owner, deepening… [+2448 chars]"
+    },
+    {
+      "source": {
+        "id": null,
+        "name": "CNA"
+      },
+      "author": null,
+      "title": "Tesla offers cash rebate on top models in China",
+      "description": "BEIJING : Tesla on Friday said it would offer new buyers of its top-selling electric vehicles in China a cash bonus equivalent to almost $500 if they have a referral from an existing owner, deepening a price war in the world's largest market for EVs.Tesla sai…",
+      "url": "https://www.channelnewsasia.com/business/tesla-offers-new-china-rebate-price-cuts-rock-ev-market-3612716",
+      "urlToImage": "https://onecms-res.cloudinary.com/image/upload/s--8DMThO5F--/fl_relative,g_south_east,l_one-cms:core:watermark:reuters,w_0.1/f_auto,q_auto/c_fill,g_auto,h_676,w_1200/v1/one-cms/core/2023-07-07t045409z_2_lynxmpej6604v_rtroptp_3_china-trade-expo.jpg?itok=Hy1TWwV1",
+      "publishedAt": "2023-07-07T04:54:09Z",
+      "content": "BEIJING : Tesla on Friday said it would offer new buyers of its top-selling electric vehicles in China a cash bonus equivalent to almost $500 if they have a referral from an existing owner, deepening… [+2448 chars]"
+    },
+    {
+      "source": {
+        "id": null,
+        "name": "Yahoo Entertainment"
+      },
+      "author": "Reuters",
+      "title": "Tesla offers cash rebate on top models in China",
+      "description": "Tesla on Friday said it would offer new buyers of its top-selling electric vehicles in China a cash bonus equivalent to almost $500 if they have a referral...",
+      "url": "https://finance.yahoo.com/news/tesla-offers-cash-rebate-top-044827369.html",
+      "urlToImage": "https://media.zenfs.com/en/reuters-finance.com/4757c256ea441b163b8db8eb32aba4e3",
+      "publishedAt": "2023-07-07T04:48:27Z",
+      "content": "BEIJING (Reuters) - Tesla on Friday said it would offer new buyers of its top-selling electric vehicles in China a cash bonus equivalent to almost $500 if they have a referral from an existing owner,… [+2520 chars]"
+    },
+    {
+      "source": {
+        "id": null,
+        "name": "Investing.com"
+      },
+      "author": "Reuters",
+      "title": "Tesla starts to lay off some workers at China factory - Bloomberg News",
+      "description": "Tesla starts to lay off some workers at China factory - Bloomberg News",
+      "url": "https://www.investing.com/news/stock-market-news/tesla-starts-to-lay-off-some-workers-at-china-factory--bloomberg-news-3121209",
+      "urlToImage": "https://i-invdn-com.investing.com/news/Tesla_800x533_L_1615573874.jpg",
+      "publishedAt": "2023-07-07T04:45:36Z",
+      "content": "(Reuters) - Electric car maker Tesla (NASDAQ:TSLA) Inc is laying off some battery production workers at its Shanghai plant, Bloomberg News reported on Friday, citing people familiar with the matter. … [+538 chars]"
+    },
+    {
+      "source": {
+        "id": null,
+        "name": "Livemint"
+      },
+      "author": "Govind Choudhary",
+      "title": "Tesla Inc. cuts battery production workforce in Shanghai amid fierce price war in China, suggests report",
+      "description": "Tesla has reportedly initiated layoffs of battery production workers at its Shanghai plant due to a challenging price war in China's car industry. The exact number of affected workers and reasons for the layoffs remain unclear.",
+      "url": "https://www.livemint.com/companies/tesla-inc-cuts-battery-production-workforce-in-shanghai-amid-fierce-price-war-in-china-suggests-report-11688704386433.html",
+      "urlToImage": "https://www.livemint.com/lm-img/img/2023/07/07/600x338/Tesla-is-well-known-for-manufacturing-all-of-its-k_1684803400784_1688704899853.jpg",
+      "publishedAt": "2023-07-07T04:42:04Z",
+      "content": "Tesla Inc. has reportedly initiated layoffs of a portion of its battery production workers at its Shanghai plant, according to individuals familiar with the situation. This move comes in the midst of… [+2204 chars]"
+    },
+    {
+      "source": {
+        "id": null,
+        "name": "Marketscreener.com"
+      },
+      "author": "Reuters",
+      "title": "Tesla offers cash rebate on top models in China",
+      "description": "(marketscreener.com) Tesla on Friday said it\nwould offer new buyers of its top-selling electric vehicles in\nChina a cash bonus equivalent to almost $500 if they have a\nreferral from an existing owner, deepening a price war in the\nworld's largest market for EV…",
+      "url": "https://www.marketscreener.com/quote/stock/TESLA-INC-6344549/news/Tesla-offers-cash-rebate-on-top-models-in-China-44285352/",
+      "urlToImage": "https://www.marketscreener.com/images/twitter_MS_fdnoir.png",
+      "publishedAt": "2023-07-07T04:41:52Z",
+      "content": "BEIJING, July 7 (Reuters) - Tesla on Friday said it\r\nwould offer new buyers of its top-selling electric vehicles in\r\nChina a cash bonus equivalent to almost $500 if they have a\r\nreferral from an exis… [+2564 chars]"
+    },
+    {
+      "source": {
+        "id": "the-times-of-india",
+        "name": "The Times of India"
+      },
+      "author": "Reuters",
+      "title": "Tesla starts to lay off some workers at China factory",
+      "description": "It was not clear how many workers may be let go, or the specific reasons behind the layoffs, according to the report.",
+      "url": "https://economictimes.indiatimes.com/tech/technology/tesla-starts-to-lay-off-some-workers-at-china-factory/articleshow/101561674.cms",
+      "urlToImage": "https://img.etimg.com/thumb/msid-101561710,width-1070,height-580,imgsize-28000,overlay-ettech/photo.jpg",
+      "publishedAt": "2023-07-07T04:30:08Z",
+      "content": "Electric car maker Tesla Inc is laying off some battery production workers at its Shanghai plant, Bloomberg News reported on Friday, citing people familiar with the matter.It was not clear how many w… [+604 chars]"
+    },
+    {
+      "source": {
+        "id": null,
+        "name": "Yahoo Entertainment"
+      },
+      "author": "Kari Lundgren and Stephen Treloar",
+      "title": "Oil is Hard to Quit, Even in Norway Where Electric Cars Rule the Road",
+      "description": "(Bloomberg) -- At a Circle K service station outside of Kongsberg, Norway, electric car charging stands outnumber gasoline pumps. It’s a scene that is...",
+      "url": "https://finance.yahoo.com/news/oil-hard-quit-even-norway-040915394.html",
+      "urlToImage": "https://s.yimg.com/ny/api/res/1.2/dTSaiTGK9sxKu8ZA9sBJCg--/YXBwaWQ9aGlnaGxhbmRlcjt3PTEyMDA7aD03Mzc-/https://media.zenfs.com/en/bloomberg_markets_842/5e7939422f95a8155ef3f2c74af8120f",
+      "publishedAt": "2023-07-07T04:09:15Z",
+      "content": "(Bloomberg) -- At a Circle K service station outside of Kongsberg, Norway, electric car charging stands outnumber gasoline pumps. Its a scene that is steadily being replicated all over the Nordic cou… [+4835 chars]"
+    },
+    {
+      "source": {
+        "id": null,
+        "name": "Autocar"
+      },
+      "author": "Autocar",
+      "title": "Akio Toyoda: 'I have fought to bring the uniqueness back to Toyota'",
+      "description": "“Racing helps us make better cars: we work in strict parameters to tight deadlines and we push the boundaries”\n\n\n'Best cars in town' philosophy has drastically transformed the once-ailing firm's fortunes\n\nFebruary 17, 2010. The day Akio Toyoda, just months in…",
+      "url": "https://www.autocar.co.uk/car-news/new-cars/akio-toyoda-i-have-fought-bring-uniqueness-back-toyota",
+      "urlToImage": "https://www.autocar.co.uk/sites/autocar.co.uk/files/images/car-reviews/first-drives/legacy/akio-toyoda-with-toyota-corolla-sprinter-levin-bev-concept-2023_0.jpg",
+      "publishedAt": "2023-07-07T04:01:44Z",
+      "content": "February 17, 2010. The day Akio Toyoda, just months into his presidency of Toyota, bowed before US Congress in order to explain the unintended acceleration crisis that led to more than 10 million veh… [+2098 chars]"
+    },
+    {
+      "source": {
+        "id": null,
+        "name": "CNA"
+      },
+      "author": null,
+      "title": "Tesla starts to lay off some workers at China factory - Bloomberg News",
+      "description": "Electric car maker Tesla Inc is laying off some battery production workers at its Shanghai plant, Bloomberg News reported on Thursday, citing people familiar with the matter. It's not clear how many workers may be let go, or the specific reasons behind the la…",
+      "url": "https://www.channelnewsasia.com/business/tesla-starts-lay-some-workers-china-factory-bloomberg-news-3612571",
+      "urlToImage": "https://onecms-res.cloudinary.com/image/upload/s--s46kNdQW--/fl_relative,g_south_east,l_one-cms:core:watermark:reuters,w_0.1/f_auto,q_auto/c_fill,g_auto,h_676,w_1200/v1/one-cms/core/2023-07-07t033306z_1_lynxmpej66040_rtroptp_3_tesla-china.jpg?itok=PuBdk72I",
+      "publishedAt": "2023-07-07T03:33:06Z",
+      "content": "Electric car maker Tesla Inc is laying off some battery production workers at its Shanghai plant, Bloomberg News reported on Thursday, citing people familiar with the matter. \r\nIt's not clear how man… [+92 chars]"
+    },
+    {
+      "source": {
+        "id": null,
+        "name": "CNA"
+      },
+      "author": null,
+      "title": "Tesla starts to lay off some workers at China factory: Report",
+      "description": "Electric car maker Tesla Inc is laying off some battery production workers at its Shanghai plant, Bloomberg News reported on Friday (Jul 7), citing people familiar with the matter. It was not clear how many workers may be let go, or the specific reasons behin…",
+      "url": "https://www.channelnewsasia.com/business/tesla-starts-lay-some-workers-china-factory-report-3612571",
+      "urlToImage": "https://onecms-res.cloudinary.com/image/upload/s--buCe3Cvj--/fl_relative,g_south_east,l_one-cms:core:watermark:reuters,w_0.1/f_auto,q_auto/c_fill,g_auto,h_676,w_1200/v1/one-cms/core/2023-07-07t044034z_3_lynxmpej66040_rtroptp_3_tesla-china.jpg?itok=y80eLcMV",
+      "publishedAt": "2023-07-07T03:33:00Z",
+      "content": "Electric car maker Tesla Inc is laying off some battery production workers at its Shanghai plant, Bloomberg News reported on Friday (Jul 7), citing people familiar with the matter.\r\nIt was not clear … [+516 chars]"
+    },
+    {
+      "source": {
+        "id": "the-jerusalem-post",
+        "name": "The Jerusalem Post"
+      },
+      "author": "By REUTERS",
+      "title": "Tesla starts to lay off some workers at China factory - Bloomberg News",
+      "description": "Electric car maker Tesla Inc TSLA.O is laying off some battery production workers at its Shanghai plant, Bloom",
+      "url": "https://www.jpost.com/breaking-news/article-749221",
+      "urlToImage": "https://images.jpost.com/image/upload/f_auto,fl_lossy/c_fill,g_faces:center,h_407,w_690/534687",
+      "publishedAt": "2023-07-07T03:27:17Z",
+      "content": "Electric car maker Tesla Inc TSLA.O is laying off some battery production workers at its Shanghai plant, Bloomberg News reported on Thursday, citing people familiar with the matter.\r\nIt's not clear h… [+98 chars]"
+    },
+    {
+      "source": {
+        "id": null,
+        "name": "Marketscreener.com"
+      },
+      "author": "Reuters",
+      "title": "Tesla starts to lay off some workers at China factory - Bloomberg News",
+      "description": "(marketscreener.com) Electric car maker Tesla Inc\nis laying off some battery production workers at its Shanghai\nplant, Bloomberg News reported on Thursday, citing people\nfamiliar with the matter.\n It's not clear how many workers may be let go, or the\nspecific…",
+      "url": "https://www.marketscreener.com/quote/stock/TESLA-INC-6344549/news/Tesla-starts-to-lay-off-some-workers-at-China-factory-Bloomberg-News-44285169/",
+      "urlToImage": "https://www.marketscreener.com/images/twitter_MS_fdblanc.png",
+      "publishedAt": "2023-07-07T03:20:57Z",
+      "content": "July 6 (Reuters) - Electric car maker Tesla Inc\r\nis laying off some battery production workers at its Shanghai\r\nplant, Bloomberg News reported on Thursday, citing people\r\nfamiliar with the matter.\r\nI… [+187 chars]"
+    },
+    {
+      "source": {
+        "id": "google-news",
+        "name": "Google News"
+      },
+      "author": null,
+      "title": "Tesla starts to lay off some workers at China factory - Bloomberg News - Reuters",
+      "description": "Tesla starts to lay off some workers at China factory - Bloomberg News  Reuters",
+      "url": "https://consent.google.com/ml?continue=https://news.google.com/rss/articles/CBMigAFodHRwczovL3d3dy5yZXV0ZXJzLmNvbS9idXNpbmVzcy9hdXRvcy10cmFuc3BvcnRhdGlvbi90ZXNsYS1zdGFydHMtbGF5LW9mZi1zb21lLXdvcmtlcnMtY2hpbmEtZmFjdG9yeS1ibG9vbWJlcmctbmV3cy0yMDIzLTA3LTA3L9IBAA?oc%3D5&gl=FR&hl=en-US&cm=2&pc=n&src=1",
+      "urlToImage": null,
+      "publishedAt": "2023-07-07T03:06:13Z",
+      "content": "We use cookies and data to<ul><li>Deliver and maintain Google services</li><li>Track outages and protect against spam, fraud, and abuse</li><li>Measure audience engagement and site statistics to unde… [+1131 chars]"
+    },
+    {
+      "source": {
+        "id": null,
+        "name": "Lavozdegalicia.es"
+      },
+      "author": "César Rodríguez",
+      "title": "La «asesina» de Twitter",
+      "description": "",
+      "url": "https://www.lavozdegalicia.es/noticia/opinion/2023/07/07/asesina-twitter/0003_202307G7P45996.htm",
+      "urlToImage": "https://www.lavozdegalicia.es/default/2023/07/06/00121688658422446756189/Foto/reu_20230706_140411218.jpg",
+      "publishedAt": "2023-07-07T03:00:00Z",
+      "content": "En la era del vdeo social, el texto tiene presente y futuro. La terrible deriva de Twitter, en manos de un propietario genial, excntrico, atrabiliario y, por momentos, antiliberal, Elon Musk, ha abie… [+1090 chars]"
+    },
+    {
+      "source": {
+        "id": null,
+        "name": "Biztoc.com"
+      },
+      "author": "businessinsider.com",
+      "title": "Elon Musk fired most of Twitter's staff and said their talents will be of 'great use elsewhere.' Twitter's now threatening to sue Meta, accusing the company…",
+      "description": "Elon Musk. Alain Jocard/Getty Images Meta launched a text-based app called Threads that competes with platforms like Twitter. In less than 24 hours, Elon Musk's lawyer sent a cease-and-desist letter over Meta's app. The letter accuses Meta of hiring \"dozens\" …",
+      "url": "https://biztoc.com/x/2bab42ece3b18f88",
+      "urlToImage": "https://c.biztoc.com/p/2bab42ece3b18f88/s.webp",
+      "publishedAt": "2023-07-07T02:46:03Z",
+      "content": "Elon Musk.Alain Jocard/Getty ImagesMeta launched a text-based app called Threads that competes with platforms like Twitter.In less than 24 hours, Elon Musk's lawyer sent a cease-and-desist letter ove… [+305 chars]"
+    },
+    {
+      "source": {
+        "id": null,
+        "name": "Ozbargain.com.au"
+      },
+      "author": "choofa",
+      "title": "Tesla Model 3 or Y $750 discount and 3 months enhanced autopilot with referral",
+      "description": "Starting July 7, 2023, if your friend orders a new Model 3 or Model Y using your referral link:\n\nThey’ll receive A$750 off their purchase price and 3 months of Enhanced Autopilot.\nYou’ll receive 10,000 referral credits.\n\n\nIf you own (or have previously owned)…",
+      "url": "https://www.ozbargain.com.au/node/786150",
+      "urlToImage": "https://files.ozbargain.com.au/n/50/786150l.jpg?h=fe9753ae",
+      "publishedAt": "2023-07-07T02:37:56Z",
+      "content": "Starting July 7, 2023, if your friend orders a new Model 3 or Model Y using your referral link:\r\nTheyll receive A$750 off their purchase price and 3 months of Enhanced Autopilot.\r\nYoull receive 10,00… [+571 chars]"
+    },
+    {
+      "source": {
+        "id": null,
+        "name": "AZCentral"
+      },
+      "author": "Arizona Republic, Jose R. Gonzalez, Arizona Republic",
+      "title": "Chandler man arrested in stabbing, dismemberment of Neb. teen whose remains found in bonfire pile",
+      "description": "The body of the 18-year-old, Parker League, was burned beyond recognition, charging documents reveal. Anthonie Ruinard Jr. was being held on a $2M bond.",
+      "url": "https://www.azcentral.com/story/news/local/chandler-breaking/2023/07/06/arizona-man-arrested-stabbing-death-dismemberment-nebraska-teenager-remains-tonto-national-forest/70389447007/",
+      "urlToImage": "https://www.gannett-cdn.com/presto/2019/03/12/PPHX/76655701-6bb4-4fd2-8d29-526cd2df3834-Posse_Sun_City_West-7.jpg?auto=webp&crop=5183,2915,x0,y287&format=pjpg&width=1200",
+      "publishedAt": "2023-07-07T02:33:41Z",
+      "content": "Authorities have booked a man they say is responsible for the malicious death of a Nebraska teen found slain last month in Tonto National Forest.\r\nAnthonie Ruinard Jr., 37, of Chandler, was arrested … [+3190 chars]"
+    },
+    {
+      "source": {
+        "id": null,
+        "name": "Biztoc.com"
+      },
+      "author": "benzinga.com",
+      "title": "Tesla's Solar Factory",
+      "description": "New York’s nearly $1 billion investment in Elon Musk‘s plan for a massive solar-panel factory, once touted as the largest in the Western Hemisphere, has largely failed to deliver on its promises, The Wall Street Journal reports. Unfulfilled Promises The state…",
+      "url": "https://biztoc.com/x/0550aaf76ee5bc39",
+      "urlToImage": "https://c.biztoc.com/p/0550aaf76ee5bc39/s.webp",
+      "publishedAt": "2023-07-07T02:16:05Z",
+      "content": "New Yorks nearly $1 billion investment in Elon Musks plan for a massive solar-panel factory, once touted as the largest in the Western Hemisphere, has largely failed to deliver on its promises, The W… [+257 chars]"
+    },
+    {
+      "source": {
+        "id": "business-insider",
+        "name": "Business Insider"
+      },
+      "author": "Lloyd Lee",
+      "title": "Elon Musk fired most of Twitter's staff and said their talents will be of 'great use elsewhere.' Twitter's now threatening to sue Meta, accusing the company of hiring former employees to create a 'copycat' app.",
+      "description": "Elon Musk fired thousands of Twitter employees shortly after he purchased the company and said their talents will \"be of great use elsewhere.\"",
+      "url": "https://www.businessinsider.com/twitter-lawsuit-meta-hiring-former-staff-elon-musk-fired-employees-2023-7",
+      "urlToImage": "https://i.insider.com/649bfb6a6eb0a800194d6eb0?width=1200&format=jpeg",
+      "publishedAt": "2023-07-07T02:04:50Z",
+      "content": "Elon Musk.Alain Jocard/Getty Images\r\n<ul>\n<li>Meta launched a text-based app called Threads that competes with platforms like Twitter.</li>\n<li>In less than 24 hours, Elon Musk's lawyer sent a cease-… [+2638 chars]"
+    },
+    {
+      "source": {
+        "id": null,
+        "name": "Marketscreener.com"
+      },
+      "author": "Reuters",
+      "title": "Tesla enhances cash rewards to new buyers of Model 3, Model Y in China",
+      "description": "(marketscreener.com) Tesla announced on Friday to\nenhances cash rewards to new buyers of Model 3 and Model Y\nvehicles based on recommendation from existing owners in China,\naccording to a post on the U.S. electric vehicle giant's\nofficial Weibo account.\n \n ht…",
+      "url": "https://www.marketscreener.com/quote/stock/TESLA-INC-6344549/news/Tesla-enhances-cash-rewards-to-new-buyers-of-Model-3-Model-Y-in-China-44284997/",
+      "urlToImage": "https://www.marketscreener.com/images/twitter_MS_fdnoir.png",
+      "publishedAt": "2023-07-07T01:52:08Z",
+      "content": "BEIJING, July 7 (Reuters) - Tesla announced on Friday to\r\nenhances cash rewards to new buyers of Model 3 and Model Y\r\nvehicles based on recommendation from existing owners in China,\r\naccording to a p… [+125 chars]"
+    },
+    {
+      "source": {
+        "id": null,
+        "name": "Marketscreener.com"
+      },
+      "author": "Reuters",
+      "title": "TESLA ESCALATES CASH REWARDS TO NEW BUYERS OF MODEL 3 AND MODEL…",
+      "description": "(marketscreener.com) \n TESLA ESCALATES CASH REWARDS TO NEW BUYERS OF MODEL 3 AND MODEL Y VEHICLES UPON RECOMMENDATION FROM EXISTING OWNERS IN CHINA\n https://www.marketscreener.com/news/latest/TESLA-ESCALATES-CASH-REWARDS-TO-NEW-BUYERS-OF-MODEL-3-AND-MODEL-823…",
+      "url": "https://www.marketscreener.com/news/latest/TESLA-ESCALATES-CASH-REWARDS-TO-NEW-BUYERS-OF-MODEL-3-AND-MODEL-8230--44284979/",
+      "urlToImage": "https://www.marketscreener.com/images/twitter_MS_fdnoir.png",
+      "publishedAt": "2023-07-07T01:38:07Z",
+      "content": "TESLA ESCALATES CASH REWARDS TO NEW BUYERS OF MODEL 3 AND MODEL Y VEHICLES UPON RECOMMENDATION FROM EXISTING OWNERS IN CHINA"
+    },
+    {
+      "source": {
+        "id": null,
+        "name": "CleanTechnica"
+      },
+      "author": "Zachary Shahan",
+      "title": "Former Tesla Battery Expert Leading Lyten Into New Lithium-Sulfur Battery Era",
+      "description": "I was recently able to interview Celina Mikolajczak, Chief Battery Technology Officer at Lyten. Previously, she worked with Tesla for more than 6 years as a top battery engineer and manager. She’s also spent time at Panasonic, Uber, and Quantumscape. She’s ex…",
+      "url": "https://cleantechnica.com/2023/07/06/former-tesla-battery-expert-leading-lyten-into-new-lithium-sulfur-battery-era/",
+      "urlToImage": "http://cleantechnica.com/files/2023/07/Celina-Mikolajczak-Lyten-podcast-e1688692682253.png",
+      "publishedAt": "2023-07-07T01:30:01Z",
+      "content": "I was recently able to interview Celina Mikolajczak, Chief Battery Technology Officer at Lyten. Previously, she worked with Tesla for more than 6 years as a top battery engineer and manager. She’s al… [+5356 chars]"
+    },
+    {
+      "source": {
+        "id": null,
+        "name": "Biztoc.com"
+      },
+      "author": "nytimes.com",
+      "title": "Ex-Amazon Manager Sentenced to 16 Years in Prison in $9 Million Theft Scheme",
+      "description": "Kayricka Wortham, who was sentenced to prison this week, is one of seven people who were charged in connection with the theft from Amazon. Federal prosectors said that Kayricka Wortham, a former operations manager at an Amazon warehouse in Georgia, was the le…",
+      "url": "https://biztoc.com/x/8fbd1db8c1c1c0e4",
+      "urlToImage": "https://c.biztoc.com/p/8fbd1db8c1c1c0e4/og.webp",
+      "publishedAt": "2023-07-07T01:28:06Z",
+      "content": "Kayricka Wortham, who was sentenced to prison this week, is one of seven people who were charged in connection with the theft from Amazon.Federal prosectors said that Kayricka Wortham, a former opera… [+288 chars]"
+    },
+    {
+      "source": {
+        "id": null,
+        "name": "Daily Mail"
+      },
+      "author": "Michael Pickering",
+      "title": "Elon Musk blasts Threads, by using Twitter, as Australians flock to Instagram's new app",
+      "description": "The rivalry between tech billionaires Elon Musk and Mark Zuckerberg has dramatically escalated after the Facebook founder launched Threads, a direct rival to Musk's Twitter platform.",
+      "url": "https://www.dailymail.co.uk/news/article-12273295/Elon-Musk-blasts-Threads-using-Twitter-Australians-flock-Instagrams-new-app.html",
+      "urlToImage": "https://i.dailymail.co.uk/1s/2023/07/07/02/72944595-0-image-a-10_1688692735206.jpg",
+      "publishedAt": "2023-07-07T01:21:57Z",
+      "content": "Australians have rushed to download the new Threads app started by tech billionaire Mark Zuckerberg's Meta as a direct rival to Elon Musk's Twitter, as the South African mogul quickly responded by th… [+4398 chars]"
+    },
+    {
+      "source": {
+        "id": null,
+        "name": "Biztoc.com"
+      },
+      "author": "benzinga.com",
+      "title": "Top 5 Trending Stocks: Prestige Wealth's IPO, Rivian's Lawsuit, Meta's New Platform, Tesla's Dip, And Biogen's FDA Approval",
+      "description": "U.S. stocks traded lower toward the end of trading, with the Nasdaq Composite dropping over 100 points on Thursday. The Dow traded down 1.07 to 33,922.26 while the NASDAQ fell 0.82% to 13,679.04. The S&P 500 also fell, dropping 0.79% to 4,411.59. These are th…",
+      "url": "https://biztoc.com/x/f3412dcfcc054836",
+      "urlToImage": "https://c.biztoc.com/p/f3412dcfcc054836/s.webp",
+      "publishedAt": "2023-07-07T00:52:05Z",
+      "content": "U.S. stocks traded lower toward the end of trading, with the Nasdaq Composite dropping over 100 points on Thursday. The Dow traded down 1.07 to 33,922.26 while the NASDAQ fell 0.82% to 13,679.04. The… [+284 chars]"
+    },
+    {
+      "source": {
+        "id": "cnn",
+        "name": "CNN"
+      },
+      "author": "Laura He",
+      "title": "4 things making it harder for Janet Yellen to repair the US-China relationship",
+      "description": "As US Treasury Secretary Janet Yellen gears up Friday for two days of meetings with officials and economists in Beijing, she has a tough job: to stabilize a fractious relationship that worsened this week when China retaliated in a tech war with the United Sta…",
+      "url": "https://www.cnn.com/2023/07/06/economy/us-china-janet-yellen-visit-intl-hnk/index.html",
+      "urlToImage": "https://media.cnn.com/api/v1/images/stellar/prod/230706013744-01-janet-yellen-061323-file.jpg?c=16x9&q=w_800,c_fill",
+      "publishedAt": "2023-07-07T00:46:03Z",
+      "content": "As US Treasury Secretary Janet Yellen gears up Friday for two days of meetings with officials and economists in Beijing, she has a tough job: to stabilize a fractious relationship that worsened this … [+8200 chars]"
+    },
+    {
+      "source": {
+        "id": null,
+        "name": "Notebookcheck.net"
+      },
+      "author": "Julian van der Merwe",
+      "title": "Tesla Cybertruck rear light bar takes centre stage in latest road test video, revealing a possibly disapointing implementation",
+      "description": "Tesla's much-embattled Cybertruck electric pickup truck has been spotted out for testing yet again, this time giving onlookers a clear look at what the rear light bar will look like. Consensus on current Cybertruck pre-production test mules is that Tesla has …",
+      "url": "https://www.notebookcheck.net/Tesla-Cybertruck-rear-light-bar-takes-centre-stage-in-latest-road-test-video-revealing-a-possibly-disapointing-implementation.732465.0.html",
+      "urlToImage": "https://www.notebookcheck.net/fileadmin/Notebooks/News/_nc3/cybertruck_sighting_street_california.jpeg",
+      "publishedAt": "2023-07-07T00:46:00Z",
+      "content": "In the latest of a recent slew of Tesla Cybertruck sightings, we have been given a shaky glimpse at the red light bar on the rear of the electric pickup truck (via TikTok). The video isn't the cleare… [+1034 chars]"
+    },
+    {
+      "source": {
+        "id": null,
+        "name": "International Business Times"
+      },
+      "author": "AFP News",
+      "title": "US Safety Regulators Demand More Records On Tesla Autopilot",
+      "description": "US auto safety regulators have demanded additional information about Tesla's Autopilot, threatening civil penalties on the automaker for inadequate response, according to a document request reviewed Thursday by AFP.",
+      "url": "https://www.ibtimes.com/us-safety-regulators-demand-more-records-tesla-autopilot-3703789",
+      "urlToImage": "https://d.ibtimes.com/en/full/4471480/us-regulators-have-threatened-tesla-civil-penalties-failure-adequately-response-information.jpg",
+      "publishedAt": "2023-07-07T00:44:11Z",
+      "content": "US regulators have threatened Tesla with civil penalties for failure to adequately response to an information requestAFP\r\nUS auto safety regulators have demanded additional information about Tesla's … [+1459 chars]"
+    },
+    {
+      "source": {
+        "id": null,
+        "name": "Vizly.fyi"
+      },
+      "author": "samiws",
+      "title": "Show HN: Vizly – generate interactive dashboards from your data in seconds",
+      "description": "My friend and I made a web app that automatically generates an interactive dashboard from your CSV data in seconds, without needing any data science experience.\n\nComments URL: https://news.ycombinator.com/item?id=36625457\nPoints: 3\n# Comments: 0",
+      "url": "https://www.vizly.fyi/demo",
+      "urlToImage": "https://lh4.googleusercontent.com/bjhofaC42u36tR5rEN0DJPhGRSfhw5WQKfLeGJSom4jHknlixjWEOBZZHivqEol8QAHXfIVvGOYW_CHAg0Qbfl7iTkUwieazypbr6d2yG2CnSaeIk6eRW6HAQb3CioxnpBOG2BSl2oK16tuJp9F4f5m6xSJ0iQ",
+      "publishedAt": "2023-07-07T00:42:46Z",
+      "content": "<table><tr></tr>\r\n<th>Artist</th><th>Track</th><th>Album_type</th><th>Danceability</th><th>Energy</th><th>Key</th><th>Loudness</th><th>Speechiness</th><th>Acousticness</th><th>Instrumentalness</th><t… [+294009 chars]"
+    },
+    {
+      "source": {
+        "id": null,
+        "name": "Biztoc.com"
+      },
+      "author": "techcrunch.com",
+      "title": "Tesla to provide more info on its driver alert system amid Autopilot probe",
+      "description": "U.S. regulators have requested more information from Tesla to assist in their ongoing investigation into 830,000 Tesla vehicles that include Autopilot, the automaker’s advanced driver assistance system. The National Highway Traffic Safety Administration (NHTS…",
+      "url": "https://biztoc.com/x/9d7dc208ef30d550",
+      "urlToImage": "https://c.biztoc.com/p/9d7dc208ef30d550/s.webp",
+      "publishedAt": "2023-07-07T00:28:03Z",
+      "content": "U.S. regulators have requested more information from Tesla to assist in their ongoing investigation into 830,000 Tesla vehicles that include Autopilot, the automakers advanced driver assistance syste… [+260 chars]"
+    },
+    {
+      "source": {
+        "id": "techcrunch",
+        "name": "TechCrunch"
+      },
+      "author": "Rebecca Bellan",
+      "title": "Tesla to provide more info on its driver alert system amid Autopilot probe",
+      "description": "U.S. regulators have requested more information from Tesla to assist in their ongoing investigation into 830,000 Tesla vehicles that include Autopilot, the...",
+      "url": "https://techcrunch.com/2023/07/06/tesla-to-provide-more-info-on-its-driver-alert-system-amid-autopilot-probe/",
+      "urlToImage": "https://media.zenfs.com/en/techcrunch_350/d03bb5efd1e85a0fc79f24b44f729f1f",
+      "publishedAt": "2023-07-07T00:27:50Z",
+      "content": "U.S. regulators have requested more information from Tesla to assist in their ongoing investigation into 830,000 Tesla vehicles that include Autopilot, the automaker's advanced driver assistance syst… [+2454 chars]"
+    },
+    {
+      "source": {
+        "id": "next-big-future",
+        "name": "Next Big Future"
+      },
+      "author": "Brian Wang",
+      "title": "Musk Asserts Tesla FSD Will Release by End of 2023",
+      "description": "Elon Musk spoke today in a video at the World AI Conference 2023. He said FSD will be officially released at the end of this year, and he said Tesla would be happy to license self-driving technology to other car companies. He also ended by praising China’s AI…",
+      "url": "https://www.nextbigfuture.com/2023/07/musk-asserts-tesla-fsd-will-release-by-end-of-2023.html",
+      "urlToImage": "https://nextbigfuture.s3.amazonaws.com/uploads/2023/07/modelYteslabot2023-1024x576.jpeg",
+      "publishedAt": "2023-07-07T00:24:32Z",
+      "content": "Brian Wang is a Futurist Thought Leader and a popular Science blogger with 1 million readers per month. His blog Nextbigfuture.com is ranked #1 Science News Blog. It covers many disruptive technology… [+593 chars]"
+    },
+    {
+      "source": {
+        "id": null,
+        "name": "Biztoc.com"
+      },
+      "author": "theregister.com",
+      "title": "Tesla ordered to cough up data for Autopilot probe or face heavy fines",
+      "description": "An investigation by America's National Highway Traffic Safety Administration (NHTSA) into the safety of Tesla Autopilot has led to a threat of fines if Elon Musk's electric car company doesn't hand over the data requested. If Tesla doesn't comply with the ord…",
+      "url": "https://biztoc.com/x/780c878d773cb868",
+      "urlToImage": "https://c.biztoc.com/p/780c878d773cb868/s.webp",
+      "publishedAt": "2023-07-07T00:04:05Z",
+      "content": "An investigation by America's National Highway Traffic Safety Administration (NHTSA) into the safety of Tesla Autopilot has led to a threat of fines if Elon Musk's electric car company doesn't hand o… [+279 chars]"
+    },
+    {
+      "source": {
+        "id": null,
+        "name": "Theregister.com"
+      },
+      "author": "Brandon Vigliarolo",
+      "title": "Tesla ordered to cough up data for Autopilot probe or face heavy fines",
+      "description": "Just make this 'self driving' system drive itself over to the filing cabinet and fish out the documents needed\nAn investigation by America's National Highway Traffic Safety Administration (NHTSA) into the safety of Tesla Autopilot has led to a threat of fines…",
+      "url": "https://www.theregister.com/2023/07/06/nhtsa_tesla_crash_data/",
+      "urlToImage": "https://regmedia.co.uk/2023/01/23/shutterstock_musk.jpg",
+      "publishedAt": "2023-07-06T23:58:06Z",
+      "content": "An investigation by America's National Highway Traffic Safety Administration (NHTSA) into the safety of Tesla Autopilot has led to a threat of fines if Elon Musk's electric car company doesn't hand o… [+3200 chars]"
+    },
+    {
+      "source": {
+        "id": null,
+        "name": "The Daily Caller"
+      },
+      "author": "Jack Applewhite",
+      "title": "New York’s Deal To Build Elon Musk A Solar Panel Factory Turned Into A Nearly $1 Billion ‘Boondoggle’",
+      "description": "New York spent nearly $1 billion building Elon Musk a solar panel factory that has failed to meet initial expectations, The Wall Street Journal Reported.",
+      "url": "https://dailycaller.com/2023/07/06/new-york-elon-musk-tesla-solar-panel-factory-boondoggle/",
+      "urlToImage": "https://cdn01.dailycaller.com/wp-content/uploads/2023/07/GettyImages-1392610598-scaled-e1688686949236.jpg",
+      "publishedAt": "2023-07-06T23:55:08Z",
+      "content": "New York spent nearly $1 billion building Elon Musk a massive solar panel factory that has failed to meet initial expectations, including production outputs and boosting economic development, accordi… [+2852 chars]"
+    },
+    {
+      "source": {
+        "id": null,
+        "name": "The Boston Globe"
+      },
+      "author": "Mike Isaac",
+      "title": "Threads becomes most rapidly downloaded app, raising Twitter’s ire",
+      "description": "In less than a day, Threads — which is aimed as a rival to Twitter — appears to have taken the crown as the most rapidly downloaded app ever.",
+      "url": "https://www.bostonglobe.com/2023/07/06/business/threads-becomes-most-rapidly-downloaded-app-raising-twitters-ire/",
+      "urlToImage": "https://bostonglobe-prod.cdn.arcpublishing.com/resizer/tw9VdM4LC3VgOpY32HTLOwu8-vU=/506x0/cloudfront-us-east-1.images.arcpublishing.com/bostonglobe/WBOLLCEFH2HVEVQIDEZXYMO3MU.jpg",
+      "publishedAt": "2023-07-06T23:50:01Z",
+      "content": "In less than a day, Threads which is aimed as a rival to Twitter appears to have taken the crown as the most rapidly downloaded app ever. It easily outstripped ChatGPT, the chatbot, which was downloa… [+6454 chars]"
+    },
+    {
+      "source": {
+        "id": null,
+        "name": "AZCentral"
+      },
+      "author": "Arizona Republic, Corina Vanek, Arizona Republic",
+      "title": "Tesla hiring vehicle testers in Tempe; company has most crashes involving autonomous technology",
+      "description": "Tesla's CEO Elon Musk has said the company could reach full autonomous vehicle capability this year.",
+      "url": "https://www.azcentral.com/story/money/business/tech/2023/07/06/tesla-posts-part-time-jobs-for-vehicle-operators-in-tempe/70389142007/",
+      "urlToImage": "https://www.gannett-cdn.com/-mm-/106447bf35cfca296d31d0f7a377fbe62409a909/c=0-188-3414-2117/local/-/media/2018/01/26/Phoenix/Phoenix/636525788895511606-uscpcent02-6ylkodsrwhlda8zkagp-original.jpg?auto=webp&format=pjpg&width=1200",
+      "publishedAt": "2023-07-06T23:49:23Z",
+      "content": "Tempe is among 14 cities where Tesla is hiring seasonal drivers to operate a vehicle for data collection.\r\nTesla posted roles for seasonal vehicle operators in states throughout the country for a thr… [+2482 chars]"
+    },
+    {
+      "source": {
+        "id": null,
+        "name": "CleanTechnica"
+      },
+      "author": "Steve Hanley",
+      "title": "10 Self-Driving Volkswagen ID. Buzz Vans Coming To Austin This Year",
+      "description": "A small fleet of self driving Volkswagen ID. Buzz electric vans will soon be appearing on the streets of Austin Texas.",
+      "url": "https://cleantechnica.com/2023/07/06/10-self-driving-volkswagen-id-buzz-vans-coming-to-austin-this-year/",
+      "urlToImage": "http://cleantechnica.com/files/2023/07/Id.-Buzz-ADAS.jpg",
+      "publishedAt": "2023-07-06T23:47:02Z",
+      "content": "If you are out and about in Austin, Texas, later this year, you may see a Volkswagen ID. Buzz drive by with a large VW logo on the front doors and the words “Self Driving Vehicle” on its flanks. It w… [+6384 chars]"
+    },
+    {
+      "source": {
+        "id": "fortune",
+        "name": "Fortune"
+      },
+      "author": "Cindy Wang, Jamie Tarabay, Bruce Einhorn, Bloomberg",
+      "title": "Taiwan needs Elon Musk’s Starlink or something like it in case China invades. Here’s why it’s looking elsewhere",
+      "description": "Taiwan would suffer a near-total internet blackout if China cut its undersea cables, and SpaceX has the solution.",
+      "url": "https://fortune.com/2023/07/06/taiwan-elon-musk-spacex-starlink-china-war-invasion-security-satellites/",
+      "urlToImage": "https://content.fortune.com/wp-content/uploads/2023/07/GettyImages-1258741579-e1688685655685.jpg?resize=1200,600",
+      "publishedAt": "2023-07-06T23:45:05Z",
+      "content": "All that stands between Taiwan and a near-total internet blackout are 14 undersea cables a network that would make an easy target in the event of a war with China.And as tensions with Asias biggest e… [+11025 chars]"
+    },
+    {
+      "source": {
+        "id": null,
+        "name": "MarketBeat"
+      },
+      "author": "MarketBeat",
+      "title": "Amazon Is Having Its Best Run In Years, But Should You Chase It?",
+      "description": "The primary reason for Amazon's PE ratio jumping from so high in tandem with its share price is due to its falling earnings versus Apple and Meta",
+      "url": "https://www.marketbeat.com/originals/amazon-is-having-its-best-run-in-years-but-should-you-chase-it/",
+      "urlToImage": "https://www.valuewalk.com/wp-content/uploads/2023/02/Amazon-Stock.jpeg",
+      "publishedAt": "2023-07-06T23:44:28Z",
+      "content": "Key Points\r\n<ul><li>Shares are up 60% this year. </li><li>Cooling inflation readings and a risk-on sentiment have fuelled the rally. </li><li>Valuation concerns are growing, though, and are not witho… [+5246 chars]"
+    },
+    {
+      "source": {
+        "id": null,
+        "name": "Biztoc.com"
+      },
+      "author": "bbc.co.uk",
+      "title": "Can Threads make more money than Elon Musk’s Twitter?",
+      "description": "After all, Mr Zuckerberg, whose Meta made more than $117bn in sales last year, has a monster track record when it comes to selling adverts - and none of the apparent qualms of Mr Musk, who has disdained advertising at his electric car company, Tesla, and been…",
+      "url": "https://biztoc.com/x/dea9d83fdad26d97",
+      "urlToImage": "https://c.biztoc.com/p/dea9d83fdad26d97/s.webp",
+      "publishedAt": "2023-07-06T23:24:04Z",
+      "content": "After all, Mr Zuckerberg, whose Meta made more than $117bn in sales last year, has a monster track record when it comes to selling adverts - and none of the apparent qualms of Mr Musk, who has disdai… [+246 chars]"
+    },
+    {
+      "source": {
+        "id": null,
+        "name": "New Zealand Herald"
+      },
+      "author": "Nick Stewart",
+      "title": "Canny View: Protect against volatility by diversifying - and think long term",
+      "description": "OPINION: The movement of markets cannot be predicted by man or machine.",
+      "url": "https://www.nzherald.co.nz/hawkes-bay-today/news/canny-view-movement-of-markets-cannot-be-predicted-by-man-or-machine/4RTXXE64CJHNPCVTEYWXT2XHIE/",
+      "urlToImage": "https://www.nzherald.co.nz/resizer/X2ybpec1WNXCLUmDTyyuA7SHskc=/1200x675/smart/filters:quality(70)/cloudfront-ap-southeast-2.images.arcpublishing.com/nzme/2PPMS4PQ5JATNOOM7GUSJ6T5SA.jpg",
+      "publishedAt": "2023-07-06T23:19:35Z",
+      "content": "Nick Stewart says if theres one thing history definitively proves, it is that the movement of markets is random and cannot be predicted by man nor machine.OPINION\r\nThe end of 2022 and the start of 20… [+5102 chars]"
+    },
+    {
+      "source": {
+        "id": null,
+        "name": "Daily Mail"
+      },
+      "author": "Sam Merriman",
+      "title": "Broken electric vehicles need 'quarantining' says gov, driving up costs for mechanics and insurers",
+      "description": "Electric car owners face soaring insurance and repair costs over fears the vehicles could explode (file photo of Tesla which caught fire on a road in the US in 2020) after minor collisions.",
+      "url": "https://www.dailymail.co.uk/news/article-12273111/Broken-electric-vehicles-need-quarantining-says-gov-driving-costs-mechanics-insurers.html",
+      "urlToImage": "https://i.dailymail.co.uk/1s/2023/07/07/00/72942405-0-image-a-47_1688684932517.jpg",
+      "publishedAt": "2023-07-06T23:10:19Z",
+      "content": "Electric car owners face soaring insurance and repair costs over fears the vehicles could explode after being in even minor collisions.\r\nDamaged EVs must be 'quarantined' 15 metres apart from other c… [+1962 chars]"
+    },
+    {
+      "source": {
+        "id": "bbc-news",
+        "name": "BBC News"
+      },
+      "author": "https://www.facebook.com/bbcnews",
+      "title": "Can Threads make more money than Elon Musk’s Twitter?",
+      "description": "Mark Zuckerberg has made a fortune selling ads on Facebook and Instagram. Will Threads be the same?",
+      "url": "https://www.bbc.co.uk/news/business-66127141",
+      "urlToImage": "https://ichef.bbci.co.uk/news/1024/branded_news/1570D/production/_130312878_66128822.jpg",
+      "publishedAt": "2023-07-06T23:06:08Z",
+      "content": "Tech billionaires Mark Zuckerberg and Elon Musk have been joking about setting up a cage match. In the business world, the fight has already begun.\r\nLess than a day after Mr Zuckerberg launched his a… [+4912 chars]"
+    },
+    {
+      "source": {
+        "id": null,
+        "name": "AZCentral"
+      },
+      "author": "Arizona Republic, Tiffany Acosta, Arizona Republic",
+      "title": "What is Threads by Instagram? Everything to know about Twitter's competition",
+      "description": "Mark Zuckerberg's Meta launched Threads by Instagram, a new app to compete with Twitter. Here's how Threads works and what you need to join.",
+      "url": "https://www.azcentral.com/story/entertainment/life/2023/07/06/instagram-threads-explained/70388094007/",
+      "urlToImage": "https://www.gannett-cdn.com/presto/2023/07/06/USAT/d3d48a41-9712-4015-a5d1-9f73dd6c380e-presto_GettyImages-1503861085.jpg?auto=webp&crop=1911,1075,x8,y0&format=pjpg&width=1200",
+      "publishedAt": "2023-07-06T23:01:50Z",
+      "content": "Mark Zuckerbergs Threads, a new social media platform for Instagram users, went live on Thursday and is taking aim at Twitter as a new option for people who don't like the changes Elon Musk has made … [+3148 chars]"
+    },
+    {
+      "source": {
+        "id": null,
+        "name": "The Star Online"
+      },
+      "author": "LEE CHONGHUI",
+      "title": "Harnessing the power of Youth",
+      "description": "Energy powerhouse PETRONAS is steering young future leaders towards the pathway of sustainability for a better future Read full story",
+      "url": "https://www.thestar.com.my/news/nation/2023/07/07/harnessing-the-power-of-youth",
+      "urlToImage": "https://apicms.thestar.com.my/uploads/images/2023/07/07/2164380.jpg",
+      "publishedAt": "2023-07-06T23:00:00Z",
+      "content": "THE atmosphere was abuzz with excitement and enthusiasm radiating from 140 young, bright and eager students from all corners of the world Brazil to Pakistan, Indonesia, Japan and more.\r\nDarkness rapi… [+9835 chars]"
+    },
+    {
+      "source": {
+        "id": null,
+        "name": "CleanTechnica"
+      },
+      "author": "Zachary Shahan",
+      "title": "Electric 3-Wheelers With Smart Battery Swapping — Love It",
+      "description": "When we talk about electric vehicles here on CleanTechnica, we’re often referring to electric cars and electric bikes — or sometimes electric trucks, buses, and planes. But what about electric three-wheelers? There are a lot of tuk-tuks out there, and maybe a…",
+      "url": "https://cleantechnica.com/2023/07/06/electric-3-wheelers-with-smart-battery-swapping-love-it/",
+      "urlToImage": "http://cleantechnica.com/files/2023/07/RACEnergy-Arun-Sreyas-Reddy-and-Gautham-Maheswaran-CleanTechnica-e1688683784802.png",
+      "publishedAt": "2023-07-06T22:54:29Z",
+      "content": "When we talk about electric vehicles here on CleanTechnica, we’re often referring to electric cars and electric bikes or sometimes electric trucks, buses, and planes. But what about electric three-wh… [+5052 chars]"
+    },
+    {
+      "source": {
+        "id": null,
+        "name": "Biztoc.com"
+      },
+      "author": "benzinga.com",
+      "title": "Texas Residents Make $150 A Day Thanks To Tesla And Rising Temperatures",
+      "description": "Known as a leader in electric vehicles, Tesla Inc TSLA also has growing energy and solar divisions that allow users the ability to go off-grid. Users can also generate energy that can be sold back to utility companies, something that could pay off for users b…",
+      "url": "https://biztoc.com/x/2323af3c16cd41b2",
+      "urlToImage": "https://c.biztoc.com/p/2323af3c16cd41b2/s.webp",
+      "publishedAt": "2023-07-06T22:32:06Z",
+      "content": "Known as a leader in electric vehicles, Tesla Inc TSLA also has growing energy and solar divisions that allow users the ability to go off-grid.Users can also generate energy that can be sold back to … [+302 chars]"
+    },
+    {
+      "source": {
+        "id": null,
+        "name": "Richmond.com"
+      },
+      "author": "ASSOCIATED PRESS",
+      "title": "Strong demand drives US new vehicle sales higher in the first half of the year",
+      "description": "Demand for new SUVs, trucks and cars in the U.S. picked up steam in the second quarter, but the stronger sales kept prices high for consumers.",
+      "url": "https://richmond.com/news/nation-world/business/cars-trucks-suvs-sales-increase/article_c02c2432-8238-5a62-89f6-046a4f95c2e1.html",
+      "urlToImage": "https://bloximages.newyork1.vip.townnews.com/richmond.com/content/tncms/assets/v3/editorial/c/02/c02c2432-8238-5a62-89f6-046a4f95c2e1/64a5fcc6cea7d.preview.jpg?crop=1763%2C926%2C0%2C124&resize=1200%2C630&order=crop%2Cresize",
+      "publishedAt": "2023-07-06T22:30:00Z",
+      "content": "Demand for new SUVs, trucks and cars in the U.S. picked up steam in the second quarter, but the stronger sales kept prices high for consumers.\r\nAuto sales rose a healthy 16.8% from April through June… [+11031 chars]"
+    },
+    {
+      "source": {
+        "id": null,
+        "name": "Electrek"
+      },
+      "author": "Fred Lambert",
+      "title": "Elon Musk believes Tesla will have ‘level 4 or 5’ self-driving this year – what does that mean?",
+      "description": "Elon Musk has again decided to share a timeline about Tesla’s self-driving effort – again claiming it will achieve “full self-driving” by the end of the year.\nBut this time, the CEO has mentioned “level 4 or 5” self-driving. However, it’s not clear if he know…",
+      "url": "https://electrek.co/2023/07/06/elon-musk-tesla-level-4-or-5-self-driving-this-year/",
+      "urlToImage": "https://i0.wp.com/electrek.co/wp-content/uploads/sites/3/2023/02/Tesla-Full-Self-Driving-Beta-smear-campaign.jpg?resize=1200%2C628&quality=82&strip=all&ssl=1",
+      "publishedAt": "2023-07-06T22:28:20Z",
+      "content": "Elon Musk has again decided to share a timeline about Tesla’s self-driving effort again claiming it will achieve “full self-driving” by the end of the year.\r\nBut this time, the CEO has mentioned “lev… [+3267 chars]"
+    },
+    {
+      "source": {
+        "id": null,
+        "name": "Energycentral.com"
+      },
+      "author": "[Energy Central] Dan Delurey",
+      "title": "10 Climate & Energy Things I Should Have Written About",
+      "description": "Everybody Knows that a Miracle Will Save Us – Right? A few weeks ago, for a couple of days, the third headline on the online Edition of Washington Post was “Scientists Discover Way to Make Energy from Air Using Nearly Any Material”. ..",
+      "url": "https://energycentral.com/c/ec/blog-post-10-climate-energy-things-i-should-have-written-about",
+      "urlToImage": null,
+      "publishedAt": "2023-07-06T22:26:35Z",
+      "content": "Everybody Knows that a Miracle Will Save Us Right?\r\nA few weeks ago, for a couple of days, the third headline on the online Edition of Washington Post was Scientists Discover Way to Make Energy from … [+19754 chars]"
+    },
+    {
+      "source": {
+        "id": null,
+        "name": "Biztoc.com"
+      },
+      "author": "techcrunch.com",
+      "title": "Twitter threatens to sue Meta over its new Threads app",
+      "description": "Twitter is threatening to sue Meta over its new Threads app less than 24 hours after it launched, as first reported by Semafor. The Elon Musk-owned company is accusing Meta of poaching former Twitter employees to create the new platform. Threads, which is a t…",
+      "url": "https://biztoc.com/x/36cf5f243965bb23",
+      "urlToImage": "https://c.biztoc.com/p/36cf5f243965bb23/og.webp",
+      "publishedAt": "2023-07-06T22:24:04Z",
+      "content": "Twitter is threatening to sue Meta over its new Threads app less than 24 hours after it launched, as first reported by Semafor. The Elon Musk-owned company is accusing Meta of poaching former Twitter… [+284 chars]"
+    },
+    {
+      "source": {
+        "id": null,
+        "name": "The Root"
+      },
+      "author": "Candace McDuffie",
+      "title": "Will Meta's Threads Be A Safe Haven For Black Folks As Twitter Continues To Sink?",
+      "description": "Photo: rafapress (Shutterstock)\r\nMillions of people have flocked to Meta’s new app, Threads, which stands in direct competition with Twitter. Since Elon Musk acquired Twitter last year, it has drastically changed for the worse and left users in search of some…",
+      "url": "https://www.theroot.com/will-metas-threads-be-a-safe-haven-for-black-folks-as-t-1850612060",
+      "urlToImage": "https://i.kinja-img.com/gawker-media/image/upload/c_fill,f_auto,fl_progressive,g_center,h_675,pg_1,q_80,w_1200/3340865abf2fd2092539341fde6f4684.jpg",
+      "publishedAt": "2023-07-06T22:18:34Z",
+      "content": "Millions of people have flocked to Metas new app, Threads, which stands in direct competition with Twitter. Since Elon Musk acquired Twitter last year, it has drastically changed for the worse and le… [+1855 chars]"
+    },
+    {
+      "source": {
+        "id": null,
+        "name": "Electrek"
+      },
+      "author": "Peter Johnson",
+      "title": "Nissan plans to build two electric sedans, crossovers to follow at US assembly plant",
+      "description": "Nissan is retooling its Canton, Mississippi, assembly plant to become “North America’s electrification hub” over the next several years. The automaker plans to begin building EVs in the US, starting with a pair of electric sedans in 2026.\n more…\nThe post Niss…",
+      "url": "https://electrek.co/2023/07/06/nissan-plans-electric-sedans-crossovers-us/",
+      "urlToImage": "https://i0.wp.com/electrek.co/wp-content/uploads/sites/3/2023/07/Nissan-electric-sedans.jpeg?resize=1200%2C628&quality=82&strip=all&ssl=1",
+      "publishedAt": "2023-07-06T22:02:31Z",
+      "content": "Nissan is retooling its Canton, Mississippi, assembly plant to become “North America’s electrification hub” over the next several years. The automaker plans to begin building EVs in the US, starting … [+3493 chars]"
+    },
+    {
+      "source": {
+        "id": null,
+        "name": "VOA News"
+      },
+      "author": "VOA Learning English",
+      "title": "Meta Launches Threads to Compete with Twitter",
+      "description": "Twitter users who are looking for another social media service after Elon Musk took over have another choice. Threads is a new app from Meta, the company behind Facebook and Instagram. It is not yet available in Europe.",
+      "url": "https://learningenglish.voanews.com/a/meta-launches-threads-to-compete-with-twitter/7169873.html",
+      "urlToImage": "https://gdb.voanews.com/1963d795-c15f-499e-9d1b-d28a71cfff23_w1200_r1.jpg",
+      "publishedAt": "2023-07-06T21:58:21Z",
+      "content": "People who are unhappy with the way businessman Elon Musk has been running Twitter now have a new social media service to consider.\r\nMeta, the company that owns Facebook and Instagram, launched an ap… [+3801 chars]"
+    },
+    {
+      "source": {
+        "id": null,
+        "name": "Biztoc.com"
+      },
+      "author": "npr.org",
+      "title": "How fast can the auto industry go electric? Debate rages as the U.S. sets new rules",
+      "description": "How fast can the auto industry go electric? Debate rages as the U.S. sets new rules For car policy wonks, the Environmental Protection Agency's proposed new vehicle standards are this summer's hot blockbuster. The surprisingly ambitious proposal unveiled earl…",
+      "url": "https://biztoc.com/x/98f608dc3bc09aeb",
+      "urlToImage": "https://c.biztoc.com/p/98f608dc3bc09aeb/og.webp",
+      "publishedAt": "2023-07-06T21:56:07Z",
+      "content": "How fast can the auto industry go electric? Debate rages as the U.S. sets new rulesFor car policy wonks, the Environmental Protection Agency's proposed new vehicle standards are this summer's hot blo… [+279 chars]"
+    },
+    {
+      "source": {
+        "id": null,
+        "name": "Wccftech"
+      },
+      "author": "Omar Sohail",
+      "title": "Twitter Has Threatened To Sue Meta Over Threads, On Grounds Of ‘Trade Secrets And Other Intellectual Property’",
+      "description": "Twitter is gearing up to sue Meta for the launch of the Threads app, which serves as a direct competitor to the micro-blogging social network. However, in a letter sent […]\nWritten by Omar Sohail",
+      "url": "https://wccftech.com/twitter-threatens-to-sue-meta-over-threads/",
+      "urlToImage": "https://cdn.wccftech.com/wp-content/uploads/2023/07/Meta-Threads.jpg",
+      "publishedAt": "2023-07-06T21:50:22Z",
+      "content": "Twitter is gearing up to sue Meta for the launch of the Threads app, which serves as a direct competitor to the micro-blogging social network. However, in a letter sent to Meta, a Twitter lawyer argu… [+2941 chars]"
+    },
+    {
+      "source": {
+        "id": null,
+        "name": "MarketWatch"
+      },
+      "author": "MarketWatch Automation",
+      "title": "Company Close Updates: Workhorse Group Inc. stock underperforms Thursday when compared to competitors",
+      "description": "Shares of Workhorse Group Inc. slid 7.24% to $0.90 Thursday, on what proved to be an all-around grim trading session for the stock market, with the NASDAQ...",
+      "url": "https://www.marketwatch.com/data-news/workhorse-group-inc-stock-underperforms-thursday-when-compared-to-competitors-ffad9f94-d6a3ebc43e92",
+      "urlToImage": "https://images.mktw.net/im-220105/social",
+      "publishedAt": "2023-07-06T21:42:10Z",
+      "content": "Shares of Workhorse Group Inc. \r\n WKHS,\r\n -7.24%\r\nslid 7.24% to $0.90 Thursday, on what proved to be an all-around grim trading session for the stock market, with the NASDAQ Composite Index \r\n COMP,\r… [+742 chars]"
+    },
+    {
+      "source": {
+        "id": null,
+        "name": "New Zealand Herald"
+      },
+      "author": "Sandi Black",
+      "title": "Museum Notebook: Determining trickery from reality",
+      "description": "Early forms of trick photography are on show at the Whanganui Regional Museum.",
+      "url": "https://www.nzherald.co.nz/whanganui-chronicle/news/museum-notebook-determining-trickery-from-reality/QD44N3JNGJBNPLTINT6ZK3E5BI/",
+      "urlToImage": "https://www.nzherald.co.nz/resizer/SrHyGISqjb4K84qVep9ZvFJAMfU=/1200x675/smart/filters:quality(70)/cloudfront-ap-southeast-2.images.arcpublishing.com/nzme/OMRQXUBBJZAL3BG7NUP42B3YGE.jpg",
+      "publishedAt": "2023-07-06T21:35:52Z",
+      "content": "Chess with Himself: Three images of the same man, two playing chess and the third pouring himself a drink. Photo / Tesla Studios, 1930s/Whanganui Regional Museum CollectionTrick photography has been … [+3145 chars]"
+    },
+    {
+      "source": {
+        "id": null,
+        "name": "Marketscreener.com"
+      },
+      "author": "Dow Jones",
+      "title": "Tech Slips, Beating Market, as AI Craze Lingers -- Tech Roundup",
+      "description": "(marketscreener.com) \n Shares of technology companies fell, but not by as much as the broad market, as the artificial-intelligence investment craze lingered. \n\n \"The core value proposition of enterprise software is the automation of business processes, and wi…",
+      "url": "https://www.marketscreener.com/news/latest/Tech-Slips-Beating-Market-as-AI-Craze-Lingers-Tech-Roundup--44284106/",
+      "urlToImage": "https://www.marketscreener.com/images/twitter_MS_fdblanc.png",
+      "publishedAt": "2023-07-06T21:16:03Z",
+      "content": "Shares of technology companies fell, but not by as much as the broad market, as the artificial-intelligence investment craze lingered. \r\n\"The core value proposition of enterprise software is the auto… [+589 chars]"
+    },
+    {
+      "source": {
+        "id": null,
+        "name": "Biztoc.com"
+      },
+      "author": "fortune.com",
+      "title": "Mark Zuckerberg and Linda Yaccarino are in a war of words over the Twitter-Threads death match",
+      "description": "Twitter and Meta’s new text-based platform Threads are at war. Twitter has seen several rivals emerge since Elon Musk bought the social media platform, significantly including Jack Dorsey’s Mastodon, but the biggest threat yet is Mark Zuckerberg’s brain child…",
+      "url": "https://biztoc.com/x/d371632140daf642",
+      "urlToImage": "https://c.biztoc.com/p/d371632140daf642/s.webp",
+      "publishedAt": "2023-07-06T21:08:03Z",
+      "content": "Twitter and Metas new text-based platform Threads are at war. Twitter has seen several rivals emerge since Elon Musk bought the social media platform, significantly including Jack Dorseys Mastodon, b… [+291 chars]"
+    },
+    {
+      "source": {
+        "id": null,
+        "name": "Biztoc.com"
+      },
+      "author": "aol.com",
+      "title": "Meta's Threads rollout proves Instagram is the company's future",
+      "description": "CEO Mark Zuckerberg took the wraps off of his Twitter competitor Threads on Wednesday, officially kicking off a battle with Tesla CEO and Twitter owner Elon Musk. And one of the most important aspects of the Threads launch is its connection to Instagram. Meta…",
+      "url": "https://biztoc.com/x/73d2cb83bca6a42e",
+      "urlToImage": "https://c.biztoc.com/p/73d2cb83bca6a42e/s.webp",
+      "publishedAt": "2023-07-06T21:06:05Z",
+      "content": "CEO Mark Zuckerberg took the wraps off of his Twitter competitor Threads on Wednesday, officially kicking off a battle with Tesla CEO and Twitter owner Elon Musk.And one of the most important aspects… [+295 chars]"
+    },
+    {
+      "source": {
+        "id": null,
+        "name": "Instapundit.com"
+      },
+      "author": "Glenn Reynolds",
+      "title": "ELECTRIC NEWS: 2025 Tesla Model S: Everything You Should Know About the Electric Sedan.",
+      "description": "ELECTRIC NEWS: 2025 Tesla Model S: Everything You Should Know About the Electric Sedan.",
+      "url": "https://instapundit.com/593437/",
+      "urlToImage": "https://instapundit.com/wp-content/themes/instapundit/images/opengraph-default.png",
+      "publishedAt": "2023-07-06T21:00:09Z",
+      "content": "InstaPundit is a participant in the Amazon Services LLC Associates Program, an affiliate advertising program designed to provide a\r\n means for sites to earn advertising fees by advertising and linkin… [+15 chars]"
+    },
+    {
+      "source": {
+        "id": null,
+        "name": "Biztoc.com"
+      },
+      "author": "electrek.co",
+      "title": "Over a dozen EV automakers, including Tesla and NIO pledge to avoid further price wars in China",
+      "description": "A slew of automakers in China have banded together and pledged to regulate how they market their EVs and avoid further price wars to help stabilize a booming market for consumers. Chinese EV automakers like NIO, XPeng, and BYD have been joined by the likes of…",
+      "url": "https://biztoc.com/x/79d97b7f0f6f5ba8",
+      "urlToImage": "https://c.biztoc.com/p/79d97b7f0f6f5ba8/og.webp",
+      "publishedAt": "2023-07-06T21:00:06Z",
+      "content": "A slew of automakers in China have banded together and pledged to regulate how they market their EVs and avoid further price wars to help stabilize a booming market for consumers. Chinese EV automake… [+268 chars]"
+    },
+    {
+      "source": {
+        "id": null,
+        "name": "Tech Xplore"
+      },
+      "author": "Science X",
+      "title": "US safety regulators demand more records on Tesla Autopilot",
+      "description": "US auto safety regulators have demanded additional information about Tesla's Autopilot, threatening civil penalties on the automaker for inadequate response, according to a document request reviewed Thursday by AFP.",
+      "url": "https://techxplore.com/news/2023-07-safety-demand-tesla-autopilot.html",
+      "urlToImage": "https://scx2.b-cdn.net/gfx/news/2023/us-regulators-have-thr.jpg",
+      "publishedAt": "2023-07-06T20:59:14Z",
+      "content": "US auto safety regulators have demanded additional information about Tesla's Autopilot, threatening civil penalties on the automaker for inadequate response, according to a document request reviewed … [+1724 chars]"
+    },
+    {
+      "source": {
+        "id": "fortune",
+        "name": "Fortune"
+      },
+      "author": "Prarthana Prakash",
+      "title": "Mark Zuckerberg and Linda Yaccarino are in a war of words over the Twitter-Threads death match—and Elon just weighed in",
+      "description": "With reports of litigation swirling and the Meta CEO vowing to capitalize on Twitter's missed opportunity, Musk says \"competition is fine, cheating is not.\"",
+      "url": "https://fortune.com/2023/07/06/elon-musk-mark-zuckerberg-cheating-twitter-threads-yaccarino-verbal-warfare/",
+      "urlToImage": "https://content.fortune.com/wp-content/uploads/2023/07/Linda-Yaccarino-Marck-Zuckerberg.jpg?resize=1200,600",
+      "publishedAt": "2023-07-06T20:56:22Z",
+      "content": "Twitter and Metas new text-based platform Threads are at war. Twitter has seen several rivals emerge since Elon Musk bought the social media platform, significantly including Jack Dorseys Mastodon, b… [+5455 chars]"
+    },
+    {
+      "source": {
+        "id": null,
+        "name": "Biztoc.com"
+      },
+      "author": "financialjuice.com",
+      "title": "All eyes on Friday's NFP",
+      "description": "US stocks fell for the second day in a row as Treasury yields rose following surprisingly strong private hiring data. Traders are anticipating Friday's payroll figures in order to predict the Federal Reserve's next move. - The S&P 500 and Nasdaq 100 both fell…",
+      "url": "https://biztoc.com/x/2fb16cc52771909f",
+      "urlToImage": "https://c.biztoc.com/210/og.png",
+      "publishedAt": "2023-07-06T20:26:07Z",
+      "content": "US stocks fell for the second day in a row as Treasury yields rose following surprisingly strong private hiring data. Traders are anticipating Friday's payroll figures in order to predict the Federal… [+309 chars]"
+    },
+    {
+      "source": {
+        "id": null,
+        "name": "Biztoc.com"
+      },
+      "author": "npr.org",
+      "title": "How fast can the auto industry go electric? Debate rages as the U.S. sets new rules",
+      "description": "How fast can the auto industry go electric? Debate rages as the U.S. sets new rules For car policy wonks, the Environmental Protection Agency's proposed new vehicle standards are this summer's hot blockbuster. The surprisingly ambitious proposal unveiled earl…",
+      "url": "https://biztoc.com/x/7a53c3f8732c1b27",
+      "urlToImage": "https://c.biztoc.com/p/7a53c3f8732c1b27/s.webp",
+      "publishedAt": "2023-07-06T20:16:02Z",
+      "content": "How fast can the auto industry go electric? Debate rages as the U.S. sets new rulesFor car policy wonks, the Environmental Protection Agency's proposed new vehicle standards are this summer's hot blo… [+279 chars]"
+    },
+    {
+      "source": {
+        "id": null,
+        "name": "LADbible"
+      },
+      "author": "Joe Harker",
+      "title": "Twitter threatens to sue Meta for the launch of its Threads app",
+      "description": "It's possible that Elon Musk and Mark Zuckerberg will end up in a fight after all as Twitter threatens to sue Meta over the launch of Threads.",
+      "url": "https://www.ladbible.com/news/twitter-threatens-sue-meta-threads-937578-20230706",
+      "urlToImage": "https://images.ladbible.com/resize?type=jpeg&quality=70&width=1200&fit=contain&gravity=auto&url=https://eu-images.contentstack.com/v3/assets/bltcd74acc1d0a99f3a/bltef65bb0e9d1999e6/64a71c788f1343290bacb197/Twitter-sues-Facebook.png",
+      "publishedAt": "2023-07-06T20:06:06Z",
+      "content": "Twitter has threatened to sue Meta for the launch of its new social media app Threads, according to reports.\r\nSemafor - which obtained the letter - reports that the blue bird bought by Elon Musk for … [+3046 chars]"
+    },
+    {
+      "source": {
+        "id": null,
+        "name": "NPR"
+      },
+      "author": "Camila Domonoske",
+      "title": "How fast can the auto industry go electric? Debate rages as the U.S. sets new rules",
+      "description": "Automakers are building more electric vehicles, but the EPA wants to set rules pushing them to go even faster. Environmental groups say that's essential; traditional carmakers say it's not feasible.",
+      "url": "https://www.npr.org/2023/07/06/1186156123/electric-vehicles-epa-greenhouse-tailpipe-emissions-standards-comment-period",
+      "urlToImage": "https://media.npr.org/assets/img/2023/07/06/gettyimages-1466482024_wide-1024d3c4579a28d34465d1ffde688626758a7efc-s1400-c100.jpg",
+      "publishedAt": "2023-07-06T20:02:18Z",
+      "content": "Tesla vehicles recharge in February in Corte Madera, Calif. The government wants to accelerate the transition to electric vehicle, but how fast the country can actually move is being hotly debated.\r\n… [+5033 chars]"
+    },
+    {
+      "source": {
+        "id": null,
+        "name": "Mirror Online"
+      },
+      "author": "mirrornews@mirror.co.uk (Joseph McBride)",
+      "title": "Tom Brady's two-word reaction after his plea in first Threads post was ignored",
+      "description": "Threads has finally launched and multiple sports stars are creating their first posts on the new platform, although Tom Brady's didn't go to plan after being ignored",
+      "url": "https://www.mirror.co.uk/sport/other-sports/american-sports/tom-brady-threads-post-nfl-30409268",
+      "urlToImage": "https://i2-prod.mirror.co.uk/incoming/article30099003.ece/ALTERNATES/s1200/1_UFC-285-Gamrot-v-Turner.jpg",
+      "publishedAt": "2023-07-06T20:01:51Z",
+      "content": "Recently retired NFL star Tom Brady is amongst the wave of celebrities that have joined Threads, although one of his first posts didn't go well.\r\n\"Just trying to be early to the party for once,\" Brad… [+2748 chars]"
+    },
+    {
+      "source": {
+        "id": null,
+        "name": "Yahoo Entertainment"
+      },
+      "author": "Crystal Mayer",
+      "title": "How Much You Need To Live Comfortably in 25 California Cities",
+      "description": "California is undoubtedly one of the most expensive places to live in the United States. While the sunshine and beautiful scenery are truly unparalleled, the...",
+      "url": "https://finance.yahoo.com/news/much-live-comfortably-25-california-200005084.html",
+      "urlToImage": "https://s.yimg.com/ny/api/res/1.2/5baywRqM_A4OLp4WyGNbpg--/YXBwaWQ9aGlnaGxhbmRlcjt3PTEyMDA7aD02NzU-/https://media.zenfs.com/en/gobankingrates_644/354e21976e3df1f2ab5aa6b2663c1669",
+      "publishedAt": "2023-07-06T20:00:05Z",
+      "content": "Michael Gordon / Shutterstock.com\r\nCalifornia is undoubtedly one of the most expensive places to live in the United States. While the sunshine and beautiful scenery are truly unparalleled, the cost o… [+13169 chars]"
+    },
+    {
+      "source": {
+        "id": null,
+        "name": "Biztoc.com"
+      },
+      "author": "cnbc.com",
+      "title": "What Ford's buoyant quarterly sales reveal about progress toward its ambitious EV goals",
+      "description": "Resilient quarterly auto sales from Club name Ford Motor (F) on Thursday bolstered our confidence in the company's transformation strategy to support its electric vehicle future. Ford reported total U.S. auto sales of 531,662 during the second quarter, a 9.9%…",
+      "url": "https://biztoc.com/x/8919bb3cbc2f0f24",
+      "urlToImage": "https://c.biztoc.com/p/8919bb3cbc2f0f24/s.webp",
+      "publishedAt": "2023-07-06T20:00:04Z",
+      "content": "Resilient quarterly auto sales from Club name Ford Motor (F) on Thursday bolstered our confidence in the company's transformation strategy to support its electric vehicle future. Ford reported total … [+292 chars]"
+    },
+    {
+      "source": {
+        "id": "fortune",
+        "name": "Fortune"
+      },
+      "author": "Leo Schwartz, Kylie Robison",
+      "title": "Twitter owner Elon Musk has taken the first steps in creating an 'everything app' to rival WeChat. It's going to be an uphill battle",
+      "description": "Despite receiving key regulatory licenses, Musk faces greater challenges in building out his dream app.",
+      "url": "https://fortune.com/2023/07/06/elon-musk-payments-everything-app-wechat/",
+      "urlToImage": "https://content.fortune.com/wp-content/uploads/2023/07/GettyImages-1258742549-e1688671031281.jpg?resize=1200,600",
+      "publishedAt": "2023-07-06T19:59:12Z",
+      "content": "Elon Musk wants Twitter to be an everything app, which includes peer-to-peer payments, and has taken the first steps toward that goal by securing crucial financial licenses in three states. But, acco… [+6790 chars]"
+    },
+    {
+      "source": {
+        "id": null,
+        "name": "The Drive"
+      },
+      "author": null,
+      "title": "Toyota Is Right: We Need More Hybrid Cars and Fewer EVs. Here’s Why",
+      "description": "The auto industry is going all-in on electric vehicles, but a better way to lower emissions quickly is staring us in the face: hybrids.",
+      "url": "https://www.thedrive.com/features/toyota-is-right-we-need-more-hybrid-cars-and-fewer-evs-heres-why#article",
+      "urlToImage": "https://www.thedrive.com/uploads/2023/06/26/2023_Prius_XLE_SupersonicRed_002.jpg?auto=webp",
+      "publishedAt": "2023-07-06T19:52:13Z",
+      "content": "Once upon a time, Toyota led the mainstream push into energy-efficient cars with the hybrid Prius. Today, its seemingly more conservative, having pooh-poohed battery-electric vehicles for years in fa… [+8765 chars]"
+    },
+    {
+      "source": {
+        "id": null,
+        "name": "Motley Fool"
+      },
+      "author": "newsfeedback@fool.com (James Brumley)",
+      "title": "Why Canoo, Lucid, and Fisker Shares Are All Down Today",
+      "description": "Smaller, less grounded electric vehicle manufacturers are on the wrong end of a triple whammy of headlines today.",
+      "url": "https://www.fool.com/investing/2023/07/06/why-canoo-lucid-fisker-shares-are-down-thursday/",
+      "urlToImage": "https://g.foolcdn.com/editorial/images/738826/charging-an-electric-vehicle.jpg",
+      "publishedAt": "2023-07-06T19:43:41Z",
+      "content": "What happened\r\nThursday's trading session has been a lackluster one for all investors, with the S&amp;P 500 down 0.75% as of 3:28 p.m. ET. It's proving to be a particularly rough day for shareholders… [+3456 chars]"
+    },
+    {
+      "source": {
+        "id": null,
+        "name": "Biztoc.com"
+      },
+      "author": "cnbc.com",
+      "title": "Twitter accuses Meta of stealing trade secrets for its new Threads app",
+      "description": "Chief Executive Officer of SpaceX and Tesla and owner of Twitter, Elon Musk attends the Viva Technology conference dedicated to innovation and startups at the Porte de Versailles exhibition centre on June 16, 2023 in Paris, France. Twitter's lawyer wrote a le…",
+      "url": "https://biztoc.com/x/d588b2c89824701c",
+      "urlToImage": "https://c.biztoc.com/p/d588b2c89824701c/s.webp",
+      "publishedAt": "2023-07-06T19:32:03Z",
+      "content": "Chief Executive Officer of SpaceX and Tesla and owner of Twitter, Elon Musk attends the Viva Technology conference dedicated to innovation and startups at the Porte de Versailles exhibition centre on… [+277 chars]"
+    },
+    {
+      "source": {
+        "id": null,
+        "name": "Mirror Online"
+      },
+      "author": "mirrornews@mirror.co.uk (Joseph Wilkes)",
+      "title": "BREAKING: Elon Musk's Twitter theatens to SUE Zuckerberg's Meta as letter released in full",
+      "description": "It's billionaire wars as Twitter, owned by Tesla billionaire Elon Musk, threatens to sue Facebook's parent company Meta, founded by Mark Zuckerberg, over the new rival app Threads and the firm's hiring of sacked Twitter staff",
+      "url": "https://www.mirror.co.uk/news/us-news/breaking-elon-musks-twitter-theatens-30409220",
+      "urlToImage": "https://i2-prod.mirror.co.uk/incoming/article30318919.ece/ALTERNATES/s1200/0_MIRRORMUSK.jpg",
+      "publishedAt": "2023-07-06T19:24:34Z",
+      "content": "Billionaire social media wars have been sparked as Elon Musk's Twitter has threatened to sue Mark Zuckerberg's Facebook parent company Meta over its new rival Threads app, it is reported.\r\nThe full l… [+2629 chars]"
+    },
+    {
+      "source": {
+        "id": null,
+        "name": "Electrek"
+      },
+      "author": "Michelle Lewis",
+      "title": "J+ BOOSTER 2 portable EV charger review: More bang for your buck",
+      "description": "Juice Americas launched its portable two-in-one EV charger, the J+ BOOSTER 2, in North America last fall and invited Electrek to review it. Here’s how it went.\n more…\nThe post J+ BOOSTER 2 portable EV charger review: More bang for your buck appeared first on …",
+      "url": "https://electrek.co/2023/07/06/j-booster-2-review-ev-charger/",
+      "urlToImage": "https://i0.wp.com/electrek.co/wp-content/uploads/sites/3/2022/12/j-booster-2.jpg?resize=1200%2C628&quality=82&strip=all&ssl=1",
+      "publishedAt": "2023-07-06T19:24:15Z",
+      "content": "Juice Americas launched its portable two-in-one EV charger, the J+ BOOSTER 2, in North America last fall and invited Electrek to review it. Here’s how it went.\r\nJuly 6, 2023 update: The J+ BOOSTER 2 … [+4420 chars]"
+    },
+    {
+      "source": {
+        "id": "techcrunch",
+        "name": "TechCrunch"
+      },
+      "author": "Aisha Malik",
+      "title": "Twitter threatens to sue Meta over its new Threads app",
+      "description": "Twitter is threatening to sue Meta over its new Threads app less than 24 hours after it launched, as first reported by Semafor. The Elon Musk-owned company is accusing Meta of poaching former Twitter employees to create the new platform. Threads, which is a t…",
+      "url": "https://techcrunch.com/2023/07/06/twitter-threatens-to-sue-meta-over-its-new-threads-app/",
+      "urlToImage": "https://techcrunch.com/wp-content/uploads/2023/07/GettyImages-1507064230.jpg?w=1024",
+      "publishedAt": "2023-07-06T19:22:21Z",
+      "content": "Twitter is threatening to sue Meta over its new Threads app less than 24 hours after it launched, as first reported by Semafor. The Elon Musk-owned company is accusing Meta of poaching former Twitter… [+3382 chars]"
+    },
+    {
+      "source": {
+        "id": null,
+        "name": "CleanTechnica"
+      },
+      "author": "Carolyn Fortuna",
+      "title": "The Tesla Magic — Part Enchantment, Part Wizardry",
+      "description": "Tesla shares jumped 6.9% this week and were part of a momentum that surged the all-electric car maker's trends ahead of other EV stocks, such as Rivian, Fisker, and Lucid. The upswing is a reflection of the company's impressive 83% year-over-year growth in de…",
+      "url": "https://cleantechnica.com/2023/07/06/the-tesla-magic-part-enchantment-part-wizardry/",
+      "urlToImage": "http://cleantechnica.com/files/2023/07/DALL·E-impressionist-painting-e1688671141828-800x390.png",
+      "publishedAt": "2023-07-06T19:16:36Z",
+      "content": "Forget the dismal 2022. The Tesla magic is back.\r\nShares jumped 7% to a new high for 2023 after the all-electric carmaker said its deliveries in the most recent quarter rose 83% compared with the sam… [+7078 chars]"
+    },
+    {
+      "source": {
+        "id": "breitbart-news",
+        "name": "Breitbart News"
+      },
+      "author": "Frances Martel, Frances Martel",
+      "title": "Uyghurs: 'China Is Obliterating the Future of Our Nation' – and Corporations Are Helping",
+      "description": "Uyghurs organized a protest in front of the White House on Wednesday demanding the U.S. government enact stricter sanctions on China.",
+      "url": "https://www.breitbart.com/asia/2023/07/06/uyghurs-china-is-obliterating-future-our-nation-corporations-are-helping/",
+      "urlToImage": "https://media.breitbart.com/media/2023/07/357687598_611281454437405_865549020792444486_n-640x335.jpeg",
+      "publishedAt": "2023-07-06T19:12:18Z",
+      "content": "Members of the Uyghur and other Turkic communities of East Turkistan organized a protest in front of the White House on Wednesday demanding the U.S. government enact stricter sanctions on China and o… [+6368 chars]"
+    }
+  ]
+
+
+  constructor(props) {
+    super(props);
+
+    // this.prevPage = this.prevPage.bind(this);
+    // this.nextPage = this.nextPage.bind(this);
+
+    document.title = `AajTak | ${this.props.title}`;
+    const dataArray = jsonData;
+    console.log(typeof dataArray);
+
+
+    this.state = {
+      articles: [],
+      loading: true,
+      page: 1,
+      totalArticles: 0,
+      // api: "e7f3c5c6bfbd4eb09d89234855d036ba",           //1
+      // api: "fdf7b06eac3847bbbb8733478f641676",           //2
+      // api: "72fb1894d0b7482297edd8dd614d55da",           //3
+      // api: "b5ec941c97a5433a9b5ebe68302ce143",           //4
+      // api: "f9d598beb4bf4cb78701c48fa37175ec",           //5  
+      // api: "b047f87941d64bca838116aa9f5439bf"            //6
+    };
+  }
+
+  async componentDidMount() {
+    // let url = `https://newsapi.org/v2/top-headlines?country=${this.props.country}&category=${this.props.category}&apiKey=${this.state.api}&page=${this.state.page}&pageSize=${this.props.pageSize}`;
+    // let data = await fetch(url);
+    // let parsedData = await data.json();
+
+    this.setState({
+      // articles: parsedData.articles,
+      // totalArticles: parsedData.totalResults,
+      // loading: false
+    });
+
+    this.setState({
+      articles: this.articles.slice((this.props.pageSize - 1) * 6, this.props.pageSize * 6),
+      totalArticles: this.articles.length,
+      loading: false
+    })
+
+
+
+  }
+
+  async prevPage() {
+    this.setState({
+      page: this.state.page - 1
+    }, () => {
+      this.updateNews();
+    });
+
+  }
+
+  async nextPage() {
+    this.setState({
+      page: this.state.page + 1
+    }, () => {
+      this.fetchMoreData();
+    })
+  }
+
+  updateNews = async () => {
+    let url = `https://newsapi.org/v2/top-headlines?country=${this.props.country}&category=${this.props.category}&apiKey=${this.state.api}&page=${this.state.page}&pageSize=${this.props.pageSize}`;
+
+    this.setState({
+      loading: true,
+    })
+
+    let data = await fetch(url);
+    let parsedData = await data.json();
+
+    this.setState({
+      articles: parsedData.articles,
+      loading: false
+    })
+  }
+
+  loadFunc = async () => {
+    /*this.setState({
+      page: this.state.page + 1
+    })
+
+    let url = `https://newsapi.org/v2/top-headlines?country=${this.props.country}&category=${this.props.category}&apiKey=${this.state.api}&page=${this.state.page}&pageSize=${this.props.pageSize}`;
+
+    this.setState({
+      loading: true,
+    })
+
+    let data = await fetch(url);
+    let parsedData = await data.json();
+
+    this.setState({
+      articles: this.state.articles.concat(parsedData.articles),
+      loading: false
+    })*/
+
+
+    this.setState({
+      page: this.state.page + 1,
+      loading: true
+    });
+
+    wait(2000);
+
+    this.setState({
+      articles: this.state.articles.concat(this.articles.slice((this.props.pageSize - 1) * 6, this.props.pageSize * 6)),
+      totalArticles: this.articles.length,
+      loading: false
+    })
+  }
+
+
+  render() {
+    return (
+      <div className='container my-3'>
+        <div style={{ display: "flex", alignItems: "center", marginBottom: "5px" }}>
+          <h1>
+            Aaj Tak, Apke Ghar Tak
+          </h1>
+
+          {Object.values(imageMap).map((image, index) => (
+            <img
+              key={index}
+              src={image}
+              alt=''
+              style={{
+                height: '75px',
+                width: '75px',
+                display: 'inline',
+                borderRadius: '75px',
+                marginLeft: '25px',
+              }}
+            />
+          ))}
+
+        </div>
+
+        {/* {this.state.loading && <Loading />} */}
+
+        {/* <InfiniteScroll
+          dataLength={this.state.articles.length}
+          next={this.nextPage}
+          hasMore={this.state.articles.length !== this.state.totalArticles}
+          loader={<Loading />}
+        > */}
+
+        <InfiniteScroll
+          pageStart={0}
+          loadMore={this.loadFunc}
+          hasMore={this.state.articles.length !== this.state.totalArticles}
+          loader={<Loading key={this.state.page} />}
+          useWindow={false}
+        >
+
+
+          <div className="row container" style={{ margin: "50px auto" }}>
+            {this.state.articles.map((element, index) => {
+
+              return (
+                <div className="col-md-4" key={index}>
+                  <NewsItem
+                    title={
+                      (element.title.split(" ").length > 10 ? element.title.split(" ").slice(0, 10).join(" ") + "..." : element.title)
+                    }
+
+                    description={
+                      (element.description === null) ? (element.description) : (element.description.split(" ").length > 25 ? element.description.split(" ").slice(0, 20).join(" ") + "..." : element.description)
+                    }
+
+                    imageUrl={(element.urlToImage === null || element.urlToImage === "") ? defaultNewsImage : element.urlToImage}
+                    newsUrl={element.url}
+
+                    author={(element.author === null) || (element.author === "") ? "Unknown" : element.author}
+
+                    time={element.publishedAt}
+                  />
+                </div>
+              )
+            })
+            }
+          </div>
+
+        </InfiniteScroll>
+
+        {/* <div className="d-flex justify-content-between align-items-center" style={{ margin: "50px 0px" }}>
+
+        <button type="button"
+          disabled={this.state.page === 1} className="btn btn-dark"
+          onClick={this.prevPage}>
+          &larr; Previous
+        </button>
+
+        <div style={{ fontSize: "18px", fontFamily: "'Open Sans', sans-serif" }}>{this.state.page} / {Math.ceil(this.state.totalArticles / this.props.pageSize)}</div>
+        <button type="button"
+          disabled={this.state.page === Math.ceil(this.state.totalArticles / this.props.pageSize)}
+          className="btn btn-dark"
+          onClick={this.nextPage}>
+          Next &rarr;
+        </button>
+      </div> */}
+
+      </div>
+    )
+  }
+}
+
+export default News
