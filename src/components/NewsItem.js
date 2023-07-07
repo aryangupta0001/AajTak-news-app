@@ -48,32 +48,32 @@ export class NewsItem extends Component {
             //     </div>
             // </div>
 
-            <div style={{ display: "flex", margin: "10px 0px", height: "30vh", border: "1px solid black", padding: "5px", justifyContent: "space-between" }}>
-                <div style={{ display: "flex", width: "20%", alignItems: "center", border: "1px solid black" }} >
+            <div style={{ display: "flex", margin: "10px 0px", height: "30vh", padding: "5px", justifyContent: "space-between", borderRadius: "30px", backgroundColor: "beige"}}>
+                <div style={{ display: "flex", width: "20%", alignItems: "center" }} >
                     <img src={imageUrl} alt="" style={{ maxWidth: "100%" }} />
                 </div>
 
-                <div style={{ width: "78%" }}>
-                    <h3 className="card-title">{title}</h3>
-                    <p className="card-text" style={{ fontSize: "1.15rem" }}>{description}</p>
-
-                    <div style={{ display: "flex" }}>
+                <div style={{ width: "78%", display: "flex", flexDirection: "column", justifyContent: "space-between" }}>
+                    <div style={{}}>
+                        <h3 className="card-title">{title}</h3>
+                        <p className="card-text" style={{ fontSize: "1.15rem" }}>{description}</p>
+                    </div>
+                    <div style={{ display: "flex", justifyContent: "space-between" }}>
                         <div>
 
                             <p>
                                 <small className="text-body-secondary">By {author}</small>
-
                             </p>
 
                             <p>
                                 <small className="text-body-secondary">{new Date(time).toGMTString()}</small>
-
                             </p>
                         </div>
 
 
 
-                        <div>
+                        <div style={{display: "flex", justifyContent: "center", alignItems: "center", width: "40%"}}>
+                            <a href={newsUrl} target='_blank' rel="noreferrer" className="btn btn-primary btn-sm" >Read More</a>
 
                         </div>
                     </div>
