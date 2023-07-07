@@ -32,7 +32,7 @@ export class News extends Component {
   newsArticles = []
   newsPage = 0
   newsLoading = true
-  newsTotalArticles = 0
+  newsTotalArticles = 1000
 
   static defaultProps = {
     country: "in",

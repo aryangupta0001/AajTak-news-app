@@ -53,24 +53,25 @@ export class NewsItem extends Component {
                     <img src={imageUrl} alt="" style={{ maxWidth: "100%" }} />
                 </div>
 
-                <div style={{ width: "78%", display: "flex", flexDirection: "column", justifyContent: "space-between" }}>
-                    <div style={{}}>
+                <div style={{ width: "78%", height: "100%", display: "flex", flexDirection: "column", justifyContent: "space-between" }}>
+
+                    <div style={{ height: "70%", display: "flex", flexDirection: "column", justifyContent: "space-evenly"}}>
                         <h3 className="card-title">{title}</h3>
                         <p className="card-text" style={{ fontSize: "1.15rem" }}>{description}</p>
                     </div>
-                    <div style={{ display: "flex", justifyContent: "space-between" }}>
-                        <div>
 
-                            <p>
+
+
+                    <div style={{ height: "30%", display: "flex", justifyContent: "space-between" }}>
+                        <div>
+                            <p style={{margin: "0"}}>
                                 <small className="text-body-secondary">By {author}</small>
                             </p>
 
-                            <p>
+                            <p style={{margin: "0"}}>
                                 <small className="text-body-secondary">{new Date(time).toGMTString()}</small>
                             </p>
                         </div>
-
-
 
                         <div style={{display: "flex", justifyContent: "center", alignItems: "center", width: "40%"}}>
                             <a href={newsUrl} target='_blank' rel="noreferrer" className="btn btn-primary btn-sm" >Read More</a>

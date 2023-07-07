@@ -9,7 +9,7 @@ export class Navbar extends Component {
 
             <nav className="navbar navbar-expand-lg bg-body-tertiary">
                 <div className="container-fluid mx-5">
-                    {/* <Link className="navbar-brand" aria-current="page" onClick={() => this.props.changeCat("general")} to="/">AajTak</Link> */}
+                    {/* <a className="navbar-brand" aria-current="page" onClick={() => this.props.changeCat("general")} to="/">AajTak</a> */}
 
 
                     <button className="navbar-brand nav-link active" aria-current="page" onClick={() => this.props.changeCat("home")} to="/">AajTak</button>
@@ -23,7 +23,7 @@ export class Navbar extends Component {
                         <ul className="navbar-nav me-auto mb-2 mb-lg-0">
 
                             {/* If below links, do not work or give error, try the following li item :- */}
-                            {/* <li className="nav-item"><Link className="nav-link active" aria-current="page"  onClick={() => this.props.changeCat("general")} to="/">General</Link></li> */}
+                            {/* <li className="nav-item"><a className="nav-link active" aria-current="page"  onClick={() => this.props.changeCat("general")} to="/">General</a></li> */}
 
                             <li className="nav-item"><button className="nav-link active" aria-current="page" onClick={() => this.props.changeCat("general")} >         General</button></li>
                             <li className="nav-item"><button className="nav-link active" aria-current="page" onClick={() => this.props.changeCat("technology")} >      Technology</button></li>
@@ -34,17 +34,70 @@ export class Navbar extends Component {
                             <li className="nav-item"><button className="nav-link active" aria-current="page" onClick={() => this.props.changeCat("science")} >         Science</button></li>
 
 
-                            {/* <li className="nav-item dropdown">
-                                <Link className="nav-link dropdown-toggle" to="/" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            <li className="nav-item dropdown mx-5">
+                                <a className="nav-link dropdown-toggle" to="/" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                                     Country
-                                </Link>
-                                <ul className="dropdown-menu">  
-                                    <li><Link className="dropdown-item" to="">Action</Link></li>
-                                    <li><Link className="dropdown-item" to="/">Another action</Link></li>
-                                    <li><hr className="dropdown-divider"/></li>
-                                    <li><Link className="dropdown-item" to="/">Something else here</Link></li>
+                                </a>
+                                <ul className="dropdown-menu">
+                                    <li><a className="dropdown-item" href="#">ae</a></li>
+                                    <li><a className="dropdown-item" href="#">ar</a></li>
+                                    <li><a className="dropdown-item" href="#">at</a></li>
+                                    <li><a className="dropdown-item" href="#">au</a></li>
+                                    <li><a className="dropdown-item" href="#">be</a></li>
+                                    <li><a className="dropdown-item" href="#">bg</a></li>
+                                    <li><a className="dropdown-item" href="#">br</a></li>
+                                    <li><a className="dropdown-item" href="#">ca</a></li>
+                                    <li><a className="dropdown-item" href="#">ch</a></li>
+                                    <li><a className="dropdown-item" href="#">cn</a></li>
+                                    <li><a className="dropdown-item" href="#">co</a></li>
+                                    <li><a className="dropdown-item" href="#">cu</a></li>
+                                    <li><a className="dropdown-item" href="#">cz</a></li>
+                                    <li><a className="dropdown-item" href="#">de</a></li>
+                                    <li><a className="dropdown-item" href="#">eg</a></li>
+                                    <li><a className="dropdown-item" href="#">fr</a></li>
+                                    <li><a className="dropdown-item" href="#">gb</a></li>
+                                    <li><a className="dropdown-item" href="#">gr</a></li>
+                                    <li><a className="dropdown-item" href="#">hk</a></li>
+                                    <li><a className="dropdown-item" href="#">hu</a></li>
+                                    <li><a className="dropdown-item" href="#">id</a></li>
+                                    <li><a className="dropdown-item" href="#">ie</a></li>
+                                    <li><a className="dropdown-item" href="#">il</a></li>
+                                    <li><a className="dropdown-item" href="#">in</a></li>
+                                    <li><a className="dropdown-item" href="#">it</a></li>
+                                    <li><a className="dropdown-item" href="#">jp</a></li>
+                                    <li><a className="dropdown-item" href="#">kr</a></li>
+                                    <li><a className="dropdown-item" href="#">lt</a></li>
+                                    <li><a className="dropdown-item" href="#">lv</a></li>
+                                    <li><a className="dropdown-item" href="#">ma</a></li>
+                                    <li><a className="dropdown-item" href="#">mx</a></li>
+                                    <li><a className="dropdown-item" href="#">my</a></li>
+                                    <li><a className="dropdown-item" href="#">ng</a></li>
+                                    <li><a className="dropdown-item" href="#">nl</a></li>
+                                    <li><a className="dropdown-item" href="#">no</a></li>
+                                    <li><a className="dropdown-item" href="#">nz</a></li>
+                                    <li><a className="dropdown-item" href="#">ph</a></li>
+                                    <li><a className="dropdown-item" href="#">pl</a></li>
+                                    <li><a className="dropdown-item" href="#">pt</a></li>
+                                    <li><a className="dropdown-item" href="#">ro</a></li>
+                                    <li><a className="dropdown-item" href="#">rs</a></li>
+                                    <li><a className="dropdown-item" href="#">ru</a></li>
+                                    <li><a className="dropdown-item" href="#">sa</a></li>
+                                    <li><a className="dropdown-item" href="#">se</a></li>
+                                    <li><a className="dropdown-item" href="#">sg</a></li>
+                                    <li><a className="dropdown-item" href="#">si</a></li>
+                                    <li><a className="dropdown-item" href="#">sk</a></li>
+                                    <li><a className="dropdown-item" href="#">th</a></li>
+                                    <li><a className="dropdown-item" href="#">tr</a></li>
+                                    <li><a className="dropdown-item" href="#">tw</a></li>
+                                    <li><a className="dropdown-item" href="#">ua</a></li>
+                                    <li><a className="dropdown-item" href="#">us</a></li>
+                                    <li><a className="dropdown-item" href="#">ve</a></li>
+                                    <li><a className="dropdown-item" href="#">za</a></li>
+
+                                    <li><hr className="dropdown-divider" /></li>
+                                    <li><a className="dropdown-item" href="#">Something else here</a></li>
                                 </ul>
-                            </li> */}
+                            </li>
 
                         </ul>
 
@@ -64,3 +117,4 @@ export class Navbar extends Component {
 }
 
 export default Navbar
+
