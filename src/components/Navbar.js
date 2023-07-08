@@ -105,10 +105,10 @@ export class Navbar extends Component {
                             <img src={require("./images/dark-mode.png")} alt="" style={{ maxWidth: "60%" }} />
                         </li>
 
-                        <form className="d-flex" role="search">
+                        {/* <form className="d-flex" role="search">
                             <input className="form-control me-2" type="search" placeholder="Search" aria-label="Search" />
                             <button className="btn btn-outline-success" type="submit">Search</button>
-                        </form>
+                        </form> */}
                     </div>
                 </div>
             </nav>
