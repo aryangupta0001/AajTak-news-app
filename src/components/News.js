@@ -3,7 +3,6 @@ import NewsItem from './NewsItem'
 import Loading from "./Loading";
 import PropTypes from 'prop-types'
 import InfiniteScroll from 'react-infinite-scroller';
-import jsonData from './Sample.json'
 
 import defaultNewsImage from './images/default-news-image.jpg';
 import shwetaSingh1 from './images/shweta_singh_1.jpg';
@@ -29,17 +28,18 @@ const imageMap = {
 
 export class News extends Component {
 
-  newsArticles = []
-  newsPage = 1
-  newsLoading = true
-  newsTotalArticles = 10
-  // newsApi = `e7f3c5c6bfbd4eb09d89234855d036ba`
-  // newsApi = `fdf7b06eac3847bbbb8733478f641676`
-  // newsApi = `72fb1894d0b7482297edd8dd614d55da`
-  // newsApi = `b5ec941c97a5433a9b5ebe68302ce143`
-  // newsApi = `f9d598beb4bf4cb78701c48fa37175ec`
-  newsApi = `b047f87941d64bca838116aa9f5439bf`
-  newsComponent = false
+
+  // newsArticles = []
+  // newsPage = 1
+  // newsLoading = true
+  // newsTotalArticles = 10
+  // // newsApi = `e7f3c5c6bfbd4eb09d89234855d036ba`
+  // // newsApi = `fdf7b06eac3847bbbb8733478f641676`
+  // // newsApi = `72fb1894d0b7482297edd8dd614d55da`
+  // // newsApi = `b5ec941c97a5433a9b5ebe68302ce143`
+  // // newsApi = `f9d598beb4bf4cb78701c48fa37175ec`
+  // newsApi = `b047f87941d64bca838116aa9f5439bf`
+  // newsComponent = false
 
 
   static defaultProps = {
@@ -62,78 +62,78 @@ export class News extends Component {
   constructor(props) {
     super(props);
 
-    this.newsArticles = []
-    this.newsPage = 1
-    this.newsLoading = true
-    this.newsTotalArticles = 10
-    // this.newsApi = `e7f3c5c6bfbd4eb09d89234855d036ba`
-    // this.newsApi = `fdf7b06eac3847bbbb8733478f641676`
-    // this.newsApi = `72fb1894d0b7482297edd8dd614d55da`
-    // this.newsApi = `b5ec941c97a5433a9b5ebe68302ce143`
-    // this.newsApi = `f9d598beb4bf4cb78701c48fa37175ec`
-    this.newsApi = `b047f87941d64bca838116aa9f5439bf`
-    this.newsComponent = false
+    // this.newsArticles = []
+    // this.newsPage = 1
+    // this.newsLoading = true
+    // this.newsTotalArticles = 10
+    // // this.newsApi = `e7f3c5c6bfbd4eb09d89234855d036ba`
+    // // this.newsApi = `fdf7b06eac3847bbbb8733478f641676`
+    // // this.newsApi = `72fb1894d0b7482297edd8dd614d55da`
+    // // this.newsApi = `b5ec941c97a5433a9b5ebe68302ce143`
+    // // this.newsApi = `f9d598beb4bf4cb78701c48fa37175ec`
+    // this.newsApi = `b047f87941d64bca838116aa9f5439bf`
+    // this.newsComponent = false
+
+    this.state = {
+      newsArticles: [],
+      newsPage: 1,
+      newsLoading: true,
+      newsTotalArticles: 0,
+      newsApi: `b047f87941d64bca838116aa9f5439bf`,
+      newsComponent: false
+    };
   }
-
-
 
   async componentDidMount() {
 
-    if (this.newsComponent === false) {
+    console.log("Initial news page", this.state.newsPage);
+
+    let url = `https://newsapi.org/v2/top-headlines?country=${this.props.country}&category=${this.props.category}&apiKey=${this.state.newsApi}&page=${this.state.newsPage}&pageSize=${this.props.pageSize}`;
+    let data = await fetch(url);
+    let parsedData = await data.json();
 
 
-      console.log("Initial news page", this.newsPage);
+    // this.newsTotalArticles = parsedData.totalResults;
+    // console.log("Total news", this.newsTotalArticles);
 
-      
-      let url = `https://newsapi.org/v2/top-headlines?country=${this.props.country}&category=${this.props.category}&apiKey=${this.newsApi}&page=${this.newsPage}&pageSize=${this.props.pageSize}`;
-      let data = await fetch(url);
-      let parsedData = await data.json();
-      
-      this.newsTotalArticles = parsedData.totalResults;
-      console.log("Total news", this.newsTotalArticles);
-      
-      this.newsArticles = parsedData.articles;
-      console.log("Initial news length", this.newsArticles.length);
-      this.newsLoading = false
-      
-      
-      // this.setState({
-        //   articles: Articles.slice((this.state.page - 1) * 6, this.state.page * 6),
-        //   articles: Articles,
-        //   totalArticles: parsedData.totalResults,
-        //   loading: false
-        // })
 
-        this.newsComponent = true
-        
-    }
+    // this.newsArticles = parsedData.articles;
+    // console.log("Initial news length", this.newsArticles.length);
+    // this.newsLoading = false
 
+    // this.newsComponent = true
+
+
+    this.setState({
+      newsTotalArticles: parsedData.totalResults,
+      newsArticles: parsedData.articles,
+      newsLoading: false
+    });
   }
-
-
-
 
   loadFunc = async () => {
 
-    if (this.newsComponent === true) {
+    this.setState({
+      newsPage: this.state.newsPage + 1,
+      newsLoading: true
+    });
 
+    console.log("In load func, newsPage", this.state.newsPage);
+    // this.newsLoading = true;
 
-      this.newsPage = this.newsPage + 1;
-      console.log("In load func, newsPage", this.newsPage);
-      this.newsLoading = true;
+    let url = `https://newsapi.org/v2/top-headlines?country=${this.props.country}&category=${this.props.category}&apiKey=${this.state.newsApi}&page=${this.state.newsPage}&pageSize=${this.props.pageSize}`;
 
-      let url = `https://newsapi.org/v2/top-headlines?country=${this.props.country}&category=${this.props.category}&apiKey=${this.newsApi}&page=${this.newsPage}&pageSize=${this.props.pageSize}`;
+    let data = await fetch(url);
+    let parsedData = await data.json();
+    let Articles = parsedData.articles;
+    console.log(Articles);
 
-      let data = await fetch(url);
-      let parsedData = await data.json();
-      let Articles = parsedData.articles;
+    this.setState({
+      newsArticles: this.state.newsArticles.concat(Articles),
+      newsLoading: false
+    });
 
-      this.newsArticles = this.newsArticles.concat(Articles);
-      console.log("News length", this.newsArticles.length)
-      this.newsLoading = false;
-
-      this.forceUpdate();
-    }
+    console.log("News length", this.state.newsArticles.length)
   }
 
   render() {
@@ -162,18 +162,18 @@ export class News extends Component {
         < InfiniteScroll
           pageStart={0}
           loadMore={this.loadFunc}
-          hasMore={this.newsArticles.length <= this.newsTotalArticles + 60}
-          loader={< Loading key={this.newsPage} />}
+          hasMore={this.state.newsPage * this.props.pageSize < this.state.newsTotalArticles}
+          loader={< Loading key={this.state.newsPage} />}
           useWindow={true}
         >
           <div className="row container" style={{ margin: "50px auto" }} key={this.newsPage + 1}>
-            {this.newsArticles.map((element, index) => {
+            {this.state.newsArticles.map((element, index) => {
 
               return (
                 <div key={index}>
-                  <NewsItem key={index + this.newsTotalArticles}
+                  <NewsItem key={index + this.state.newsTotalArticles}
                     title={
-                      // (element.title.split(" ").length > 10 ? element.title.split(" ").slice(0, 10).join(" ") + "..." : element.title)
+                      // (element.title.split(" ").length > 10 ? element.title.split(" ").slice(, 10).join(" ") + "..." : element.title)
                       element.title
                     }
 
