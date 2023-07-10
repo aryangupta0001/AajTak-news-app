@@ -2,15 +2,10 @@ import React, { Component } from 'react'
 import Navbar from './components/Navbar';
 import News from './components/News';
 
-// import {
-//   BrowserRouter as Router,
-//   Routes,
-//   Route,
-// } from "react-router-dom";
-
 export default class App extends Component {
   pageSize = 6;
   title = "Home";
+  api = process.env.REACT_APP_NEWS_API_KEY;
 
   state = {
     category: "general",
@@ -30,17 +25,12 @@ export default class App extends Component {
   }
 
   render() {
+
+    console.log(this.api);
     return (
       <>
-      {/* // <Router>
-      //   <Navbar changeCat={this.setCategory} />
-      //   <Routes>
-      //     <Route path='/' element={<News key={this.state.category} pageSize={this.pageSize} country="in" category={this.state.category} />} />
-      //   </Routes>  
-      // </Router> */}
-
         <Navbar changeCat={this.setCategory} />
-        <News key={this.state.title} pageSize={this.pageSize} country="in" category={this.state.category} title = {this.state.title} />
+        <News key={this.state.title} pageSize={this.pageSize} country="in" category={this.state.category} title = {this.state.title} api = {this.api} />
       </>
     );
   }
