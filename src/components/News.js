@@ -33,12 +33,6 @@ export class News extends Component {
   // newsPage = 1
   // newsLoading = true
   // newsTotalArticles = 10
-  // // newsApi = `e7f3c5c6bfbd4eb09d89234855d036ba`
-  // // newsApi = `fdf7b06eac3847bbbb8733478f641676`
-  // // newsApi = `72fb1894d0b7482297edd8dd614d55da`
-  // // newsApi = `b5ec941c97a5433a9b5ebe68302ce143`
-  // // newsApi = `f9d598beb4bf4cb78701c48fa37175ec`
-  // newsApi = `b047f87941d64bca838116aa9f5439bf`
   // newsComponent = false
 
 
@@ -54,7 +48,8 @@ export class News extends Component {
     country: PropTypes.string,
     pageSize: PropTypes.number,
     category: PropTypes.string,
-    title: PropTypes.string
+    title: PropTypes.string,
+    api: PropTypes.string
 
   }
 
@@ -66,12 +61,6 @@ export class News extends Component {
     // this.newsPage = 1
     // this.newsLoading = true
     // this.newsTotalArticles = 10
-    // // this.newsApi = `e7f3c5c6bfbd4eb09d89234855d036ba`
-    // // this.newsApi = `fdf7b06eac3847bbbb8733478f641676`
-    // // this.newsApi = `72fb1894d0b7482297edd8dd614d55da`
-    // // this.newsApi = `b5ec941c97a5433a9b5ebe68302ce143`
-    // // this.newsApi = `f9d598beb4bf4cb78701c48fa37175ec`
-    // this.newsApi = `b047f87941d64bca838116aa9f5439bf`
     // this.newsComponent = false
 
     this.state = {
@@ -79,7 +68,6 @@ export class News extends Component {
       newsPage: 1,
       newsLoading: true,
       newsTotalArticles: 0,
-      newsApi: `b047f87941d64bca838116aa9f5439bf`,
       newsComponent: false
     };
   }
@@ -88,7 +76,7 @@ export class News extends Component {
 
     console.log("Initial news page", this.state.newsPage);
 
-    let url = `https://newsapi.org/v2/top-headlines?country=${this.props.country}&category=${this.props.category}&apiKey=${this.state.newsApi}&page=${this.state.newsPage}&pageSize=${this.props.pageSize}`;
+    let url = `https://newsapi.org/v2/top-headlines?country=${this.props.country}&category=${this.props.category}&apiKey=${this.props.api}&page=${this.state.newsPage}&pageSize=${this.props.pageSize}`;
     let data = await fetch(url);
     let parsedData = await data.json();
 
@@ -121,7 +109,7 @@ export class News extends Component {
     console.log("In load func, newsPage", this.state.newsPage);
     // this.newsLoading = true;
 
-    let url = `https://newsapi.org/v2/top-headlines?country=${this.props.country}&category=${this.props.category}&apiKey=${this.state.newsApi}&page=${this.state.newsPage}&pageSize=${this.props.pageSize}`;
+    let url = `https://newsapi.org/v2/top-headlines?country=${this.props.country}&category=${this.props.category}&apiKey=${this.props.api}&page=${this.state.newsPage}&pageSize=${this.props.pageSize}`;
 
     let data = await fetch(url);
     let parsedData = await data.json();
